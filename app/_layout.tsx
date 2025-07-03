@@ -1,9 +1,12 @@
 import { Stack } from 'expo-router'
-import {AuthProvider} from '../database/authContext'
+
+
 
 const _layout = () => {
+console.log(process.env.EXPO_PUBLIC_SUPABASE_URL); 
+console.log(process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY);
+
   return (
-    <AuthProvider>
       <Stack>
         <Stack.Screen
         name="index"
@@ -12,8 +15,6 @@ const _layout = () => {
         }}
       />
     </Stack>
-    </AuthProvider>
-
   )
 }
 

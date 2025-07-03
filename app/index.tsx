@@ -14,7 +14,7 @@ import {
   Platform,
 } from 'react-native';
 // import type {NavProps} from '../types/types';
-import {useAuth} from '../database/authContext';
+// import {useAuth} from '../database/authContext';
 
 export default function Login(): React.JSX.Element {
   const [emailValue, setEmail] = useState('');

@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.tsx
-import React, {createContext, useContext, useState, useEffect} from 'react';
+import {createContext, useContext, useState, useEffect} from 'react';
 import {Alert, Text, View, StyleSheet} from 'react-native';
 import {supabase} from '../database/supabase';
 
