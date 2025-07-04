@@ -13,7 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {useAuth} from '../database/authContext';
+import {useAuth} from '../../database/authContext';
 
 export default function Login(): React.JSX.Element {
   const [emailValue, setEmail] = useState('');
@@ -104,7 +104,7 @@ export default function Login(): React.JSX.Element {
 
   return (
     <View style={styles.body}>
-      <Image source={require('../assets/logo.png')} />
+      <Image source={require('../../assets/logo.png')} />
       {isSignUp && <Text style={styles.signUp}>Sign Up</Text>}
       <Modal 
         animationType="slide"

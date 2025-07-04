@@ -6,9 +6,15 @@ const _layout = () => {
 
   return (
     <AuthProvider>
-      <Stack>
+      <Stack screenOptions={{headerShown: false,}}>
         <Stack.Screen
-        name="index"
+        name="(auth)"
+        options={{ 
+          headerShown:false,
+        }}
+      />
+              <Stack.Screen
+        name="(main)"
         options={{ 
           headerShown:false,
         }}
