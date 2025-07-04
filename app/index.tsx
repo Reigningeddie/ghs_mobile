@@ -13,8 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-// import type {NavProps} from '../types/types';
-// import {useAuth} from '../database/authContext';
+import {useAuth} from '../database/authContext';
 
 export default function Login(): React.JSX.Element {
   const [emailValue, setEmail] = useState('');
@@ -25,7 +24,7 @@ export default function Login(): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   const [rulesVisible, setRulesVisible] = useState(false);
 
-  // const {login, signUp} = useAuth();
+  const {login, signUp} = useAuth();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.(?:com|net|org|edu)$/i;
