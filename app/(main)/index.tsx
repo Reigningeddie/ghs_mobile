@@ -10,7 +10,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 //get specific heights
 const videoBorder = screenHeight / 2.5
-const thirds = screenWidth / 3;
+const thirds = screenWidth / 3 - 0.7;
 
 const router = useRouter();
 
