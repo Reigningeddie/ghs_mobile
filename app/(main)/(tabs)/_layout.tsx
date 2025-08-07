@@ -11,6 +11,7 @@ interface TabBarIconProps {
 const _layout = () => {
   const icons = {
   profile: require('../../../assets/profile.png'),
+  feed: require('../../../assets/feed.png'),
   leaderboard: require('../../../assets/trophy.png'),
   } ;
 
@@ -36,6 +37,18 @@ const _layout = () => {
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.profile} 
+            color={color} 
+            size={size}/>
+        )
+        }}/>
+      <Tabs.Screen  
+      name='feed'
+      options={{
+        title: 'feed',
+        headerShown: false,
+        tabBarIcon: ({color, size}) => (
+          <TabIcon 
+            icon={icons.feed} 
             color={color} 
             size={size}/>
         )
