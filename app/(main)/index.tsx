@@ -1,4 +1,5 @@
 import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
+import {useRouter} from 'expo-router';
 import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import {useAuth} from '../../database/authContext';
@@ -11,6 +12,8 @@ const screenHeight = Dimensions.get('window').height;
 const videoBorder = screenHeight / 2.5
 const thirds = screenWidth / 3;
 
+const router = useRouter();
+
 export default function Profile(): React.JSX.Element {
   const {logout, profile} = useAuth();
 
@@ -20,7 +23,7 @@ export default function Profile(): React.JSX.Element {
 
   function handleLogout() {
     logout();
-    
+    router.replace('/(auth)')
   };
 
   return (
@@ -31,7 +34,7 @@ export default function Profile(): React.JSX.Element {
           Grand Hand Slam{' '}
           <Pressable onPress={() => handleLogout()}>
             <View>
-              <Image />
+              <Image source={require('../../assets/settings.png')} style={styles.settings}/>
             </View>
           </Pressable>
         </Text>
@@ -72,7 +75,6 @@ export default function Profile(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    flexGrow: 1,
     alignItems: 'center',
     width: screenWidth,
   },
@@ -90,6 +92,9 @@ const styles = StyleSheet.create({
     marginTop: -120,
     fontSize: 47,
     fontWeight: 'bold',
+  },
+  settings: {
+    height: 35,
   },
   pic: {
     backgroundColor: '#3C6E71',
@@ -136,6 +141,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#284B63',
     minHeight: videoBorder,
     width: '100%',
+    borderColor: 'black',
+    borderWidth: 1,
   },
   portrait: {
     flexDirection: 'row',

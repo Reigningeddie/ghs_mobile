@@ -5,14 +5,19 @@
     "slug": "ghs_mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {},
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "androidStatusBar": {
+      "barStyle": "dark-content", 
+      "backgroundColor": "#FFFFFF", 
+      "translucent": false 
+    }
     },
     "plugins": [
       "expo-router",

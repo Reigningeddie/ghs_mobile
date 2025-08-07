@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import {useRouter} from 'expo-router'
 import React, { useState } from 'react';
 import {
   View,
@@ -62,9 +62,12 @@ export default function Login(): React.JSX.Element {
     return Object.keys(validationErrors).length === 0;
   };
 
+  const router = useRouter(); 
+
   const handleLogin = async () => {
     try {
       const {data, error} = await login(emailValue, passwordValue);
+
       if (error && typeof error.message === 'string') {
         if (error.message.includes('Invalid login credential')) {
           throw new Error('Invalid login credential');
@@ -75,6 +78,7 @@ export default function Login(): React.JSX.Element {
         throw new Error('No session returned after login');
       }
       console.log('Login successful!');
+      router.replace('/(main)')
       // navigation.navigate('BottomTabs');
     } catch (error: any) {
       console.log('Login failed:', error);
