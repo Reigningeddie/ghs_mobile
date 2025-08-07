@@ -9,8 +9,8 @@ const _layout = () => {
       <Stack.Screen
         name="index"
         options={{
+          title: 'Login',
           headerShown: false,
-
         }}
       />
     </Stack>
