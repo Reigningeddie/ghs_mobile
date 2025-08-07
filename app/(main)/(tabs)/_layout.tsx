@@ -13,6 +13,7 @@ const _layout = () => {
   profile: require('../../../assets/profile.png'),
   feed: require('../../../assets/feed.png'),
   leaderboard: require('../../../assets/trophy.png'),
+  rules: require('../../../assets/rules.png'),
   } ;
 
   const TabIcon = ({icon, color, size}: TabBarIconProps)  => {
@@ -61,6 +62,18 @@ const _layout = () => {
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.leaderboard} 
+            color={color} 
+            size={size}/>
+        )
+      }}/>
+            <Tabs.Screen  
+      name='rules'
+      options={{
+        title: 'rules',
+        headerShown: false,
+        tabBarIcon: ({color, size}) => (
+          <TabIcon 
+            icon={icons.rules} 
             color={color} 
             size={size}/>
         )
