@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native
 import {useRouter} from 'expo-router';
 import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
-import {useAuth} from '../../database/authContext';
+import {useAuth} from '../../../database/authContext';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -34,7 +34,7 @@ export default function Profile(): React.JSX.Element {
           Grand Hand Slam{' '}
           <Pressable onPress={() => handleLogout()}>
             <View>
-              <Image source={require('../../assets/settings.png')} style={styles.settings}/>
+              <Image source={require('../../../assets/settings.png')} style={styles.settings}/>
             </View>
           </Pressable>
         </Text>

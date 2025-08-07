@@ -1,15 +1,15 @@
 import {Stack} from 'expo-router'
 import {StatusBar} from 'expo-status-bar'
 
-const _layout = () => {
+const BottomTabs = () => {
   return (
     <>
     <StatusBar style="auto" />
     <Stack>
       <Stack.Screen  
-      name='index'
+      name='(tabs)'
       options={{
-        title: 'Profile',
+        title: 'Bottom Tabs',
         headerShown: false,
       }}/>
     </Stack>
@@ -19,4 +19,4 @@ const _layout = () => {
   )
 }
 
-export default _layout
+export default BottomTabs
