@@ -33,6 +33,7 @@ const _layout = () => {
       options={{
         title: 'Profile',
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.profile} 
@@ -45,6 +46,7 @@ const _layout = () => {
       options={{
         title: 'feed',
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.feed} 
@@ -57,6 +59,7 @@ const _layout = () => {
       options={{
         title: 'leaderboard',
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.leaderboard} 
@@ -69,6 +72,7 @@ const _layout = () => {
       options={{
         title: 'rules',
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.rules} 
@@ -78,8 +82,6 @@ const _layout = () => {
       }}/>
     </Tabs>
     </>
-
-
   )
 }
 
