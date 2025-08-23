@@ -6,17 +6,13 @@ import { useColorScheme, View } from "react-native";
 
 function LayoutInner() {
   const scheme = useColorScheme();
-
   const isDark = scheme === "dark";
-  const backgroundColor = isDark ? "#000" : "#fff";
+  const backgroundColor = isDark ? "#1A1A1A" : "#fff";
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }}>
-      {/* 👇 This view fills the status bar area */}
       <View style={{ backgroundColor }} />
-
       <StatusBar style={isDark ? "light" : "dark"} />
-
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(main)" options={{ headerShown: false }} />

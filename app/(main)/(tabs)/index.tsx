@@ -141,8 +141,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#284B63',
     minHeight: videoBorder,
     width: '100%',
-    borderColor: 'black',
-    borderWidth: 1,
   },
   portrait: {
     flexDirection: 'row',
