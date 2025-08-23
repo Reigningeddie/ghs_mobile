@@ -1,22 +1,36 @@
-import { Stack } from 'expo-router';
-import { AuthProvider } from '../database/authContext';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
+import { Stack } from "expo-router";
+import { AuthProvider } from "../database/authContext";
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { useColorScheme, View } from "react-native";
 
-const _layout = () => {
+function LayoutInner() {
+  const scheme = useColorScheme();
+
+  const isDark = scheme === "dark";
+  const backgroundColor = isDark ? "#000" : "#fff";
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor }}>
+      {/* 👇 This view fills the status bar area */}
+      <View style={{ backgroundColor }} />
+
+      <StatusBar style={isDark ? "light" : "dark"} />
+
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(main)" options={{ headerShown: false }} />
+      </Stack>
+    </SafeAreaView>
+  );
+}
+
+export default function Layout() {
   return (
     <AuthProvider>
-      <SafeAreaProvider> 
-        <SafeAreaView style={{ flex: 1 }}> 
-          <StatusBar style="dark" />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(main)" options={{ headerShown: false }} />
-          </Stack>
-        </SafeAreaView>
+      <SafeAreaProvider>
+        <LayoutInner />
       </SafeAreaProvider>
     </AuthProvider>
   );
-};
-
-export default _layout;
+}
