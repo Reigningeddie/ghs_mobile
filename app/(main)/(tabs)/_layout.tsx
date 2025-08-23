@@ -1,6 +1,5 @@
 import {Tabs} from 'expo-router'
 import {Image} from 'react-native';
-import {StatusBar} from 'expo-status-bar'
 
 interface TabBarIconProps {
   icon: any;
@@ -28,7 +27,6 @@ const _layout = () => {
   }
   return (
     <>
-    <StatusBar style="auto" />
     <Tabs>
       <Tabs.Screen  
       name='index'
