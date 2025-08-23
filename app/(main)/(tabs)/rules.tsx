@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: '#00308F',
         alignItems: 'center',
-        height: '99.9%'
+        flexGrow: 1,
+        
     },
     title: {
         color: 'white',
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
     },
     scroll: {
         alignItems: 'center',
+        marginBottom: 200
     },
     txt: {
         color: 'white',

@@ -10,7 +10,6 @@ function LayoutInner() {
   const isDark = scheme === "dark";
   const backgroundColor = isDark ? "#1A1A1A" : "#fff";
 
-  console.log(insets.bottom)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }}>
