@@ -38,7 +38,6 @@ const _layout = () => {
         tabBarStyle: {
           height: 60,
           backgroundColor: isDark ? '#1A1A1A' : '#fff',
-          borderTopWidth: 0,
         }
       }}>
       <Tabs.Screen  

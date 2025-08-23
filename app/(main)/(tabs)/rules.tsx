@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
     },
     scroll: {
         alignItems: 'center',
-        marginBottom: 200
     },
     txt: {
         color: 'white',
