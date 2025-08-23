@@ -1,5 +1,6 @@
 import {Tabs} from 'expo-router'
 import {Image} from 'react-native';
+import {useColorScheme} from 'react-native';
 
 interface TabBarIconProps {
   icon: any;
@@ -8,6 +9,9 @@ interface TabBarIconProps {
 }
 
 const _layout = () => {
+  const scheme= useColorScheme();
+  const isDark = scheme === 'dark';
+
   const icons = {
   profile: require('../../../assets/profile.png'),
   feed: require('../../../assets/feed.png'),
@@ -27,13 +31,19 @@ const _layout = () => {
   }
   return (
     <>
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 50,
+          backgroundColor: isDark ? '#1A1A1A' : '#fff',
+        }
+      }}>
       <Tabs.Screen  
       name='index'
       options={{
         title: 'Profile',
-        headerShown: false,
-        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.profile} 
@@ -45,8 +55,6 @@ const _layout = () => {
       name='feed'
       options={{
         title: 'feed',
-        headerShown: false,
-        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.feed} 
@@ -58,8 +66,6 @@ const _layout = () => {
       name='leaderboard'
       options={{
         title: 'leaderboard',
-        headerShown: false,
-        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.leaderboard} 
@@ -71,8 +77,6 @@ const _layout = () => {
       name='rules'
       options={{
         title: 'rules',
-        headerShown: false,
-        tabBarShowLabel: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.rules} 
