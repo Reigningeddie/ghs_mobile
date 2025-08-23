@@ -27,7 +27,7 @@ export default function Profile(): React.JSX.Element {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.banner} />
         <Text style={styles.txt}>
@@ -65,7 +65,6 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.vids}> 3</Text>
             <Text style={styles.vids}> 2</Text>
             <Text style={styles.vids}> 1</Text>
-
           </View>
         </View>
       </ScrollView>
@@ -82,10 +81,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#284B63',
     width: '100%',
     height: 120,
-  },
-  menu: {
-    height: 40,
-    width: 40,
   },
   txt: {
     color: '#D9D9D9',
@@ -146,7 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
-    height: '100%',
+
   },
   vids: {
     backgroundColor: 'grey',
@@ -154,9 +149,5 @@ const styles = StyleSheet.create({
     borderColor: '#284B63',
     width: thirds,
     height: 200,
-  },
-  size: {
-    height: 10,
-    backgroundColor: 'black',
   },
 });

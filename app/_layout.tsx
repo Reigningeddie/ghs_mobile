@@ -5,9 +5,12 @@ import { StatusBar } from "expo-status-bar";
 import { useColorScheme, View } from "react-native";
 
 function LayoutInner() {
+  const insets = useSafeAreaInsets();
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
   const backgroundColor = isDark ? "#1A1A1A" : "#fff";
+
+  console.log(insets.bottom)
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }}>

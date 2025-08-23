@@ -36,7 +36,7 @@ const _layout = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          height: 50,
+          height: 60,
           backgroundColor: isDark ? '#1A1A1A' : '#fff',
         }
       }}>
