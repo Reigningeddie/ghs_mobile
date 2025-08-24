@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: '#00308F',
         alignItems: 'center',
-        flexGrow: 1,
-        
+        flex: 1,
     },
     title: {
         color: 'white',

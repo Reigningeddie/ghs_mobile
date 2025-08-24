@@ -69,11 +69,11 @@ export default function Profile(): React.JSX.Element {
         </Pressable>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
-            {isLeft ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hand}></Text>) }
+            {isLeft ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
             </View>
           <Text style={styles.user}>{profile?.user_name ?? 'Welcome'}</Text>
           <View style={styles.right}>
-            {isRight ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hand}></Text>)}
+            {isRight ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
           </View>
         </View>
         <View style={styles.flex}>
@@ -145,6 +145,10 @@ const styles = StyleSheet.create({
     // transform: [{ rotate: '60deg' }],
   },
   hand: {
+    fontSize: 50,
+  },
+  hidden: {
+    opacity: 0,
     fontSize: 50,
   },
   right: {
