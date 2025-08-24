@@ -16,6 +16,7 @@ const router = useRouter();
 
 export default function Profile(): React.JSX.Element {
   const {logout, profile} = useAuth();
+  const [isActive, setIsActive] = useState(false);
 
   // useEffect(() => {
   //   console.log(profile);
@@ -36,14 +37,22 @@ export default function Profile(): React.JSX.Element {
             <View>
               <Image source={require('../../../assets/settings.png')} style={styles.settings}/>
             </View>
-          </Pressable>
+          </Pressable> 
         </Text>
         <Pressable >
           <View style={styles.pic} >
             <Text style={styles.create}>{profile?.first_name ? '' : 'create Profile'}</Text>
           </View>
         </Pressable>
-        <Text style={styles.user}>{profile?.user_name ?? 'Welcome'}</Text>
+        <View style={styles.dominantHand}>
+          <View style={styles.left}>
+            {isActive && <Text style={styles.hand}>👈</Text>}
+            </View>
+          <Text style={styles.user}>{profile?.user_name ?? 'Welcome'}</Text>
+          <View style={styles.right}>
+            {isActive && <Text style={styles.hand}>👉</Text>}
+          </View>
+        </View>
         <View style={styles.flex}>
           <View style={styles.grid}>
             <Text style={styles.num}>150</Text>
@@ -105,6 +114,18 @@ const styles = StyleSheet.create({
   create: {
     color: 'black',
     fontSize: 20,
+  },
+  dominantHand: {
+    flexDirection: 'row',
+  },
+  left: {
+    transform: [{ rotate: '90deg' }],
+  },
+  hand: {
+    fontSize: 50
+  },
+  right: {
+    transform: [{ rotate: '-90deg' }],
   },
   user: {
     color: '#3C6E71',
