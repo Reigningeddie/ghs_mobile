@@ -1,8 +1,9 @@
-import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Pressable, Image, TurboModuleRegistry} from 'react-native';
 import {useRouter} from 'expo-router';
 import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import {useAuth} from '../../../database/authContext';
+import { supabase } from '../../../database/supabase';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -16,11 +17,33 @@ const router = useRouter();
 
 export default function Profile(): React.JSX.Element {
   const {logout, profile} = useAuth();
-  const [isActive, setIsActive] = useState(false);
+  const [isLeft, setIsLeft] = useState(false);
+  const [isRight, setIsRight] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(profile);
-  // }, [profile]);
+  useEffect(() => {
+    const fetchData = async() => {
+      const {data, error} = await supabase
+        .from('profile')
+        .select('right_handed, user_name')
+        .eq('id', profile?.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching profile:', error);
+        return;
+      }
+
+      if (data?.right_handed === true) {
+        setIsRight(true);
+        setIsLeft(false);
+      } else {
+        setIsRight(false);
+        setIsLeft(true);
+      }
+    };
+
+    fetchData();
+  }, [profile]);
 
   function handleLogout() {
     logout();
@@ -46,11 +69,11 @@ export default function Profile(): React.JSX.Element {
         </Pressable>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
-            {isActive && <Text style={styles.hand}>👈</Text>}
+            {isLeft ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hand}></Text>) }
             </View>
           <Text style={styles.user}>{profile?.user_name ?? 'Welcome'}</Text>
           <View style={styles.right}>
-            {isActive && <Text style={styles.hand}>👉</Text>}
+            {isRight ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hand}></Text>)}
           </View>
         </View>
         <View style={styles.flex}>
@@ -119,13 +142,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   left: {
-    transform: [{ rotate: '90deg' }],
+    // transform: [{ rotate: '60deg' }],
   },
   hand: {
-    fontSize: 50
+    fontSize: 50,
   },
   right: {
-    transform: [{ rotate: '-90deg' }],
+    // transform: [{ rotate: '-60deg' }],
   },
   user: {
     color: '#3C6E71',
