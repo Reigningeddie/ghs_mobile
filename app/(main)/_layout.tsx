@@ -2,7 +2,6 @@ import {Stack} from 'expo-router'
 
 const BottomTabs = () => {
   return (
-    <>
     <Stack>
       <Stack.Screen  
       name='(tabs)'
@@ -11,9 +10,6 @@ const BottomTabs = () => {
         headerShown: false,
       }}/>
     </Stack>
-    </>
-
-
   )
 }
 

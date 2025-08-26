@@ -30,7 +30,6 @@ const _layout = () => {
     );
   }
   return (
-    <>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -41,9 +40,9 @@ const _layout = () => {
         }
       }}>
       <Tabs.Screen  
-      name='index'
+      name='(profile)/index'
       options={{
-        title: 'Profile',
+        title: 'index',
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.profile} 
@@ -52,7 +51,7 @@ const _layout = () => {
         )
         }}/>
       <Tabs.Screen  
-      name='feed'
+      name='(feed)/index'
       options={{
         title: 'feed',
         tabBarIcon: ({color, size}) => (
@@ -63,7 +62,7 @@ const _layout = () => {
         )
       }}/>
       <Tabs.Screen  
-      name='leaderboard'
+      name='(leaderboard)/index'
       options={{
         title: 'leaderboard',
         tabBarIcon: ({color, size}) => (
@@ -73,8 +72,8 @@ const _layout = () => {
             size={size}/>
         )
       }}/>
-            <Tabs.Screen  
-      name='rules'
+      <Tabs.Screen  
+      name='(rules)/index'
       options={{
         title: 'rules',
         tabBarIcon: ({color, size}) => (
@@ -85,7 +84,6 @@ const _layout = () => {
         )
       }}/>
     </Tabs>
-    </>
   )
 }
 

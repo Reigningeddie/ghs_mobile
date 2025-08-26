@@ -29,11 +29,11 @@ const Feed = () => {
             <Text style={styles.caption}>"Add Caption Here."</Text>
           </View>
           <View style={styles.likesArea}>
-          <Image source={require('../../../assets/likeActive.png')} />
+          <Image source={require('../../../../assets/likeActive.png')} />
           <Text style={styles.likes}>5</Text>
         </View>
         <View style={styles.commentArea}>
-          <Image source={require('../../../assets/comments.png')} />
+          <Image source={require('../../../../assets/comments.png')} />
           <Text style={styles.comment}>12</Text>
         </View>
       </View>

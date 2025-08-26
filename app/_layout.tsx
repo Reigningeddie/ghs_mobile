@@ -1,11 +1,10 @@
 import { Stack } from "expo-router";
 import { AuthProvider } from "../database/authContext";
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme, View } from "react-native";
 
 function LayoutInner() {
-  const insets = useSafeAreaInsets();
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
   const backgroundColor = isDark ? "#1A1A1A" : "#fff";

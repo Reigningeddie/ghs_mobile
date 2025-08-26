@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.tsx
 import {createContext, useContext, useState, useEffect} from 'react';
-import {Alert, Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import {supabase} from '../database/supabase';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
