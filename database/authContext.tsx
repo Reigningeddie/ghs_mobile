@@ -11,7 +11,7 @@ type AuthContextType = {
   signUp: (email: string, password: string) => Promise<{data:any; error?: any}>;
   login: (email: string, password: string) => Promise<{data: any; error?: any}>;
   fetchProfile: (id: string) => Promise<{data: any, error?: any}>;
-  update: (firstName?: string, lastName?: string, userName?: string, mobileNumber?: string) => Promise<{data: any; error?: any}>;
+  update: (first_name?: string, last_name?: string, user_name?: string, mobile_number?: string) => Promise<{data: any; error?: any}>;
   logout: () => Promise<void>;
   err: string | null;
 };
@@ -144,16 +144,16 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     firstName?: string,
     lastName?: string,
     userName?: string,
-    mobileNumber?: string
+    mobileNumber?: string,
   ) => {
     setErr(null);
     try {
       const metadata = {
         id: authUser.id || null,
-        firstName: firstName || null,
-        lastName: lastName || null,
-        userName: userName || null,
-        mobileNumber: mobileNumber || null,
+        first_name: firstName || null,
+        last_name: lastName || null,
+        user_name: userName || null,
+        mobile_number: mobileNumber || null,
       };
 
       console.log('I am metadata', metadata)

@@ -37,8 +37,8 @@ export default function SignUp(): React.JSX.Element {
     let hasError = false;
     
     // Validation
-    if (!userName || userName.trim().length === 0) {  // Fixed comparison operator
-        setErrUserName('*Required');
+    if (!userName || userName.trim().length === 0) { 
+        setErrUserName;
         hasError = true;
     }
     
