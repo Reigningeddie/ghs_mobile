@@ -2,21 +2,18 @@ import {Stack} from 'expo-router'
 
 const _layout = () => {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
+    <Stack>
       <Stack.Screen 
       name='index'
       options={{
         title: 'Profile',
+        headerShown: false,
       }}
       />
       <Stack.Screen 
       name='edit'
       options={{
-        title: 'Edit Profile',
+        title: 'Back',
       }}
       />
     </Stack>

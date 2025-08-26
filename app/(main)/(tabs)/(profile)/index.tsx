@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, ScrollView, Pressable, Image, TurboModuleRegistry} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
 import {useRouter} from 'expo-router';
 import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
@@ -13,9 +13,10 @@ const screenHeight = Dimensions.get('window').height;
 const videoBorder = screenHeight / 2.5
 const thirds = screenWidth / 3 - .1;
 
-const router = useRouter();
+
 
 export default function Profile(): React.JSX.Element {
+  const router = useRouter();
   const {logout, profile} = useAuth();
   const [isLeft, setIsLeft] = useState(false);
   const [isRight, setIsRight] = useState(false);
@@ -52,6 +53,7 @@ export default function Profile(): React.JSX.Element {
 
   function handlePress() {
     router.push('edit');
+    console.log('pressed');
   };
 
   return (
