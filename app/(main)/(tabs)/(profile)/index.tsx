@@ -53,7 +53,6 @@ export default function Profile(): React.JSX.Element {
 
   function handlePress() {
     router.push('edit');
-    console.log('pressed');
   };
 
   return (

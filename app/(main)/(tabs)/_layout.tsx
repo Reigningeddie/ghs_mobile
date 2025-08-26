@@ -43,6 +43,7 @@ const _layout = () => {
       name='(profile)'
       options={{
         title: 'index',
+        headerShown: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.profile} 
