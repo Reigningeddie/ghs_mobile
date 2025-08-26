@@ -40,9 +40,10 @@ const _layout = () => {
         }
       }}>
       <Tabs.Screen  
-      name='(profile)/index'
+      name='(profile)'
       options={{
         title: 'index',
+        headerShown: false,
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.profile} 
@@ -74,7 +75,7 @@ const _layout = () => {
       }}/>
       <Tabs.Screen  
       name='(rules)/index'
-      options={{
+      options={{ 
         title: 'rules',
         tabBarIcon: ({color, size}) => (
           <TabIcon 

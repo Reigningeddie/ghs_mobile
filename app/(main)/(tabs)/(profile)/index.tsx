@@ -50,6 +50,10 @@ export default function Profile(): React.JSX.Element {
     router.replace('/(auth)')
   };
 
+  function handlePress() {
+    router.push('edit');
+  };
+
   return (
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -62,7 +66,7 @@ export default function Profile(): React.JSX.Element {
             </View>
           </Pressable> 
         </Text>
-        <Pressable >
+        <Pressable onPress={() => handlePress()} >
           <View style={styles.pic} >
             <Text style={styles.create}>{profile?.first_name ? '' : 'create Profile'}</Text>
           </View>
