@@ -18,6 +18,7 @@ export default function SignUp(): React.JSX.Element {
   const [lastName, setLast] = useState<string | undefined>(undefined);
   const [userName, setUser] = useState<string | undefined>(undefined);
   const [mobileNumber, setMobile] = useState<string>('');
+  const [toggle, setToggle] = useState<boolean>(true);
   //Error State Saves
   const [errUserName, setErrUserName] = useState<string | null>(null);
 
@@ -121,6 +122,16 @@ export default function SignUp(): React.JSX.Element {
             value={mobileNumber}
             onChangeText={input => setMobile(input)}
           />
+          <View style={styles.textAlign}>
+            <Text style={styles.text}>Dominant Hand</Text>
+            <Pressable style={styles.radioContainer}>
+              <Text style={styles.radioBtn}>
+                Left
+              </Text>
+              <Text style={styles.radioBtn}>
+                Right</Text>
+            </Pressable>
+          </View>
           {/* <TextInput
             style={styles.input}
             placeholder={'New Password'}
@@ -217,5 +228,32 @@ const styles = StyleSheet.create({
 
   require: {
     color: 'red',
+    justifyContent: 'center',
+  },
+
+  textAlign: {
+    marginTop: 15,
+  },
+
+  text: {
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+
+  radioContainer: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+
+  radioBtn: {
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 6,
+    color: 'white',
+    borderColor: '#2EA1DD',
+    backgroundColor: '#2EA1DD',
+    paddingLeft: 31,
+    paddingRight: 31
+    ,
   },
 });
