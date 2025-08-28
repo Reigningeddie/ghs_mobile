@@ -18,7 +18,7 @@ export default function SignUp(): React.JSX.Element {
   const [lastName, setLast] = useState<string | undefined>(undefined);
   const [userName, setUser] = useState<string | undefined>(undefined);
   const [mobileNumber, setMobile] = useState<string | undefined>(undefined);
-  const [active, setActive] = useState<string | undefined>(undefined);
+  const [domHand, setHand] = useState<string | undefined>(undefined);
   //Error State Saves
   const [errUserName, setErrUserName] = useState<string | null>(null);
 
@@ -30,7 +30,7 @@ export default function SignUp(): React.JSX.Element {
       setLast(profile.last_name);
       setUser(profile.user_name);
       setMobile(profile.mobile_number);
-      setActive(profile.dom_hand);
+      setHand(profile.dom_hand);
     }
   }, [profile]);
 
@@ -62,6 +62,7 @@ export default function SignUp(): React.JSX.Element {
             lastName,
             userName,
             mobileNumber,
+            domHand,
         );
         
         // Show success alert
@@ -136,14 +137,14 @@ export default function SignUp(): React.JSX.Element {
             <Text style={styles.toggleText}>Dominant Hand</Text>
             <Pressable style={styles.toggleContainer}>
               <Text style={[  styles.toggleBtn, 
-                active === 'left' && styles.toggleActive ]}
-                onPress={() => setActive('left')}
+                domHand === 'left' && styles.toggleActive ]}
+                onPress={() => setHand('left')}
                 >
                 Left
               </Text>
               <Text style={[  styles.toggleBtn, 
-                active === 'right' && styles.toggleActive ]}
-                onPress={() => setActive('right')}
+                domHand === 'right' && styles.toggleActive ]}
+                onPress={() => setHand('right')}
                 >
                 Right
               </Text>

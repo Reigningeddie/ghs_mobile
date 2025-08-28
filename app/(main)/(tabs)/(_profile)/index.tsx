@@ -18,8 +18,8 @@ const thirds = screenWidth / 3 - .1;
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {logout, profile} = useAuth();
-  const [isLeft, setIsLeft] = useState(false);
-  const [isRight, setIsRight] = useState(false);
+  const [isLeft, setIsLeft] = useState<boolean>(false);
+  const [isRight, setIsRight] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -40,9 +40,12 @@ export default function Profile(): React.JSX.Element {
       if (data?.dom_hand === 'right') {
         setIsRight(true);
         setIsLeft(false);
-      } else {
+      } else if (data?.dom_hand === 'left') {
         setIsRight(false);
         setIsLeft(true);
+      } else {
+        setIsRight(false);
+        setIsLeft(false);
       }
     };
 
