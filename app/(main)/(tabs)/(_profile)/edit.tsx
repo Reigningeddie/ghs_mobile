@@ -18,7 +18,7 @@ export default function SignUp(): React.JSX.Element {
   const [lastName, setLast] = useState<string | undefined>(undefined);
   const [userName, setUser] = useState<string | undefined>(undefined);
   const [mobileNumber, setMobile] = useState<string>('');
-  const [toggle, setToggle] = useState<boolean>(true);
+  const [active, setActive] = useState<'left' | 'right'>('left');
   //Error State Saves
   const [errUserName, setErrUserName] = useState<string | null>(null);
 
@@ -122,14 +122,21 @@ export default function SignUp(): React.JSX.Element {
             value={mobileNumber}
             onChangeText={input => setMobile(input)}
           />
-          <View style={styles.textAlign}>
-            <Text style={styles.text}>Dominant Hand</Text>
-            <Pressable style={styles.radioContainer}>
-              <Text style={styles.radioBtn}>
+          <View style={styles.toggleAlign}>
+            <Text style={styles.toggleText}>Dominant Hand</Text>
+            <Pressable style={styles.toggleContainer}>
+              <Text style={[  styles.toggleBtn, 
+                active === 'left' && styles.toggleActive ]}
+                onPress={() => setActive('left')}
+                >
                 Left
               </Text>
-              <Text style={styles.radioBtn}>
-                Right</Text>
+              <Text style={[  styles.toggleBtn, 
+                active === 'right' && styles.toggleActive ]}
+                onPress={() => setActive('right')}
+                >
+                Right
+              </Text>
             </Pressable>
           </View>
           {/* <TextInput
@@ -231,29 +238,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  textAlign: {
+  toggleAlign: {
     marginTop: 15,
   },
 
-  text: {
+  toggleText: {
     marginBottom: 5,
     textAlign: 'center',
   },
 
-  radioContainer: {
+  toggleContainer: {
     flexDirection: 'row',
     gap: 10,
   },
 
-  radioBtn: {
+  toggleBtn: {
     borderWidth: 2,
     borderRadius: 5,
     padding: 6,
-    color: 'white',
-    borderColor: '#2EA1DD',
-    backgroundColor: '#2EA1DD',
+    // color: 'white',
+    // borderColor: '#2EA1DD',
+    // backgroundColor: '#2EA1DD',
     paddingLeft: 31,
     paddingRight: 31
     ,
+  },
+
+  toggleActive: {
+    color: 'white',
+    borderColor: '#2EA1DD',
+    backgroundColor: '#2EA1DD',
   },
 });
