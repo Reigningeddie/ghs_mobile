@@ -19,6 +19,7 @@ export default function SignUp(): React.JSX.Element {
   const [userName, setUser] = useState<string | undefined>(undefined);
   const [mobileNumber, setMobile] = useState<string | undefined>(undefined);
   const [domHand, setHand] = useState<string | undefined>(undefined);
+
   //Error State Saves
   const [errUserName, setErrUserName] = useState<string | null>(null);
 
