@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,15 +14,25 @@ import {useAuth} from '../../../../database/authContext';
 //! add user already exists alerts to userName, email, and mobile Number.
 
 export default function SignUp(): React.JSX.Element {
-  const [firstName, setFirst] = useState<string>('');
+  const [firstName, setFirst] = useState<string | undefined>(undefined);
   const [lastName, setLast] = useState<string | undefined>(undefined);
   const [userName, setUser] = useState<string | undefined>(undefined);
-  const [mobileNumber, setMobile] = useState<string>('');
-  const [active, setActive] = useState<'left' | 'right'>('left');
+  const [mobileNumber, setMobile] = useState<string | undefined>(undefined);
+  const [active, setActive] = useState<string | undefined>(undefined);
   //Error State Saves
   const [errUserName, setErrUserName] = useState<string | null>(null);
 
-  const {update} = useAuth();
+  const {update, profile} = useAuth();
+
+  useEffect(() => {
+    if (profile) {
+      setFirst(profile.first_name);
+      setLast(profile.last_name);
+      setUser(profile.user_name);
+      setMobile(profile.mobile_number);
+      setActive(profile.dom_hand);
+    }
+  }, [profile]);
 
     //validation functions for state saves
     const validateUserName = (value: string): void => {

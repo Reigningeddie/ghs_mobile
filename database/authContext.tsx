@@ -11,7 +11,7 @@ type AuthContextType = {
   signUp: (email: string, password: string) => Promise<{data:any; error?: any}>;
   login: (email: string, password: string) => Promise<{data: any; error?: any}>;
   fetchProfile: (id: string) => Promise<{data: any, error?: any}>;
-  update: (first_name?: string, last_name?: string, user_name?: string, mobile_number?: string) => Promise<{data: any; error?: any}>;
+  update: (first_name?: string, last_name?: string, user_name?: string, mobile_number?: string, dom_hand?: string) => Promise<{data: any; error?: any}>;
   logout: () => Promise<void>;
   err: string | null;
 };
@@ -140,11 +140,13 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     }
   };
 
+
   const update = async (
     firstName?: string,
     lastName?: string,
     userName?: string,
     mobileNumber?: string,
+    domHand?: string,
   ) => {
     setErr(null);
     try {
@@ -154,6 +156,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
         last_name: lastName || null,
         user_name: userName || null,
         mobile_number: mobileNumber || null,
+        dom_hand: domHand || null,
       };
 
       console.log('I am metadata', metadata)
@@ -163,6 +166,8 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
         .from('profile')
         .upsert(metadata)
         .select()
+
+        console.log(metadata)
 
       if (updateError) {
         throw new Error(`Error updating user profile: ${updateError.message}`);

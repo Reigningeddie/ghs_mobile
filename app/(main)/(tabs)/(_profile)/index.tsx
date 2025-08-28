@@ -25,16 +25,19 @@ export default function Profile(): React.JSX.Element {
     const fetchData = async() => {
       const {data, error} = await supabase
         .from('profile')
-        .select('right_handed, user_name')
+        .select('dom_hand, user_name')
         .eq('id', profile?.id)
         .single();
+
+        console.log('Fetched profile data:', profile.dom_hand);
 
       if (error) {
         console.error('Error fetching profile:', error);
         return;
       }
 
-      if (data?.right_handed === true) {
+
+      if (data?.dom_hand === 'right') {
         setIsRight(true);
         setIsLeft(false);
       } else {
