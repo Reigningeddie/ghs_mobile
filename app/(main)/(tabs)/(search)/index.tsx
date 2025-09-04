@@ -1,5 +1,6 @@
-import {View, TextInput, StyleSheet, Text, FlatList} from 'react-native';
+import {View, TextInput, StyleSheet, Text, FlatList, Pressable} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import {useRouter} from 'expo-router';
 import {supabase} from '../../../../database/supabase';
 
 // Define the type for the data you're fetching
@@ -26,9 +27,14 @@ const useDebounce = <T,>(value: T, delay: number): T => {
 };
 
 const Search = () => {
+  const router = useRouter();
   const [query, setQuery] = useState<string>('');
   const [result, setResult] = useState<Profile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  function handlePress() {
+    router.push('user');
+  }
   
   // Debounce the query with a 500ms delay
   const debouncedQuery = useDebounce<string>(query, 500);
@@ -85,10 +91,10 @@ const Search = () => {
           data={result}
           keyExtractor={(item) => item.user_name}
           renderItem={({ item }) => (
-            <View style={styles.userDiv}>
+            <Pressable onPress={() => handlePress()} style={styles.userDiv}>
               <View style={styles.avatar}></View>
               <Text style={styles.users}>{item.user_name}</Text>
-            </View>
+            </Pressable>
           )}
         />
       ) : (

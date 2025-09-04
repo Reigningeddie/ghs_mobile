@@ -52,11 +52,6 @@ export default function Profile(): React.JSX.Element {
     fetchData();
   }, [profile]);
 
-  function handleLogout() {
-    logout();
-    router.replace('/(auth)')
-  };
-
   function handlePress() {
     router.push('edit');
   };
@@ -66,12 +61,12 @@ export default function Profile(): React.JSX.Element {
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.banner} />
         <Text style={styles.txt}>
-          Grand Hand Slam{' '}
-          <Pressable onPress={() => handleLogout()}>
+          <Pressable onPress={() => router.back()}>
             <View>
-              <Image source={require('../../../../assets/settings.png')} style={styles.settings}/>
+              <Image source={require('../../../../assets/back.png')} style={styles.settings}/>
             </View>
           </Pressable> 
+          Grand Hand Slam{' '}
         </Text>
         <Pressable onPress={() => handlePress()} >
           <View style={styles.pic} >
