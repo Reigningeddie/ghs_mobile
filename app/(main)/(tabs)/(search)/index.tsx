@@ -1,47 +1,67 @@
-import {View, TextInput, StyleSheet, Text, FlatList} from 'react-native'
-import React, {useState, useEffect} from 'react'
+import {View, TextInput, StyleSheet, Text, FlatList} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {supabase} from '../../../../database/supabase';
 
-const Search = () => {
-  const [query, setQuery] = useState('');
-  const [result, setResult] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+// Define the type for the data you're fetching
+interface Profile {
+  user_name: string;
+}
+
+// Custom hook for debouncing a value
+const useDebounce = <T,>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
-    if (query) {
-      const timer = setTimeout(() => {
-        setLoading(true);
-        searchDb(query);
-      }, 300);
-      return () => clearTimeout(timer);
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    // Clean up the timeout if value changes or component unmounts
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+const Search = () => {
+  const [query, setQuery] = useState<string>('');
+  const [result, setResult] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  // Debounce the query with a 500ms delay
+  const debouncedQuery = useDebounce<string>(query, 500);
+
+  useEffect(() => {
+    if (debouncedQuery.trim()) {
+      setLoading(true);
+      searchDb(debouncedQuery);
     } else {
       setResult([]);
+      setLoading(false);
     }
-  }, [query]);
+  }, [debouncedQuery]);
 
-  const searchDb = async (query:string) => {
-    if (!query.trim()) {
-      setResult([]);
-      return;
-    }
-
+  const searchDb = async (searchQuery: string) => {
     try {
       const {data, error} = await supabase
         .from('profile')
-        .select('*')
-        .ilike('user_name', `%${query}%`);
+        .select('user_name')
+        .ilike('user_name', `%${searchQuery}%`);
 
       if (error) throw error;
 
-      setResult(data);
-    } catch (error:any) {
+      // Type-check the data before setting the state
+      const typedData: Profile[] = data as Profile[];
+      setResult(typedData);
+    } catch (error: any) {
       console.error('Search error:', error.message);
+      setResult([]);
     } finally {
       setLoading(false);
     }
   };
-
-  console.log(result)
 
   return (
     <View>
@@ -54,19 +74,19 @@ const Search = () => {
         style={styles.input}
         placeholder={'Search by name'}
         value={query}
-        onChangeText={setQuery} />
+        onChangeText={setQuery}
+      />
 
-        {loading ? (
+      {loading ? (
         <Text style={styles.results}>Loading...</Text>
       ) : result.length > 0 ? (
         <FlatList
           style={styles.results}
           data={result}
-          keyExtractor={(item) => item.id.toString()} 
+          keyExtractor={(item) => item.user_name}
           renderItem={({ item }) => (
             <View>
-              {/* <Text>{`${item.firstName} ${item.lastName}`}</Text> */}
-              <Text style={styles.users}>{item.use_name}</Text>
+              <Text style={styles.users}>{item.user_name}</Text>
             </View>
           )}
         />
@@ -74,10 +94,10 @@ const Search = () => {
         <Text style={styles.results}>No results found</Text>
       )}
     </View>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
 
 const styles = StyleSheet.create({
   input: {
