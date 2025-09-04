@@ -64,7 +64,7 @@ const Search = () => {
   };
 
   return (
-    <View>
+    <View style={styles.body}>
       <TextInput
         textContentType="none"
         autoComplete="off"
@@ -85,7 +85,8 @@ const Search = () => {
           data={result}
           keyExtractor={(item) => item.user_name}
           renderItem={({ item }) => (
-            <View>
+            <View style={styles.userDiv}>
+              <View style={styles.avatar}></View>
               <Text style={styles.users}>{item.user_name}</Text>
             </View>
           )}
@@ -100,21 +101,42 @@ const Search = () => {
 export default Search;
 
 const styles = StyleSheet.create({
+  body: {
+    backgroundColor: '#D9D9D9',
+    flex: 1,
+  },
   input: {
     color: '#1B1B1B',
     fontSize: 20,
     borderWidth: 2,
     borderRadius: 5,
-    height: 43,
+    height: 45,
     margin: 15,
     paddingLeft: 15,
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   results: {
     padding: 20,
     fontSize: 20
   },
+  userDiv: {
+    height: 50,
+    alignItems: 'center',
+    borderRadius: 5,
+    marginBottom: 5,
+    backgroundColor: '#437BA1FF',
+    flexDirection: 'row',
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#1B1B1B',
+    borderRadius: 3,
+    marginRight: 10
+  },
   users: {
     margin: 3,
-    fontSize: 23 
+    fontSize: 23,
   }
 })

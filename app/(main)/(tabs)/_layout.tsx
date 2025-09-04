@@ -75,7 +75,7 @@ const _layout = () => {
         )
       }}/>
             <Tabs.Screen  
-      name='(search)/index'
+      name='(search)'
       options={{
         title: 'search',
         tabBarIcon: ({color, size}) => (
