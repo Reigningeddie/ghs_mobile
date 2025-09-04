@@ -5,6 +5,7 @@ import {supabase} from '../../../../database/supabase';
 
 // Define the type for the data you're fetching
 interface Profile {
+  id: string;
   user_name: string;
 }
 
@@ -32,8 +33,11 @@ const Search = () => {
   const [result, setResult] = useState<Profile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  function handlePress() {
-    router.push('user');
+  function handlePress(id: string) {
+    router.push({
+      pathname: 'user', 
+      params: {id}
+    });
   }
   
   // Debounce the query with a 500ms delay
@@ -53,7 +57,7 @@ const Search = () => {
     try {
       const {data, error} = await supabase
         .from('profile')
-        .select('user_name')
+        .select('id, user_name')
         .ilike('user_name', `%${searchQuery}%`);
 
       if (error) throw error;
@@ -89,9 +93,9 @@ const Search = () => {
         <FlatList
           style={styles.results}
           data={result}
-          keyExtractor={(item) => item.user_name}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Pressable onPress={() => handlePress()} style={styles.userDiv}>
+            <Pressable onPress={() => handlePress(item.id)} style={styles.userDiv}>
               <View style={styles.avatar}></View>
               <Text style={styles.users}>{item.user_name}</Text>
             </Pressable>

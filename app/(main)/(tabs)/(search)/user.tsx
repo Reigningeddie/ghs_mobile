@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
 import {useRouter} from 'expo-router';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, use} from 'react';
 import {Dimensions} from 'react-native';
-import {useAuth} from '../../../../database/authContext';
+import { useLocalSearchParams } from 'expo-router';
 import { supabase } from '../../../../database/supabase';
 // import type {NavProps} from '../types/types';
 
@@ -13,48 +13,84 @@ const screenHeight = Dimensions.get('window').height;
 const videoBorder = screenHeight / 2.5
 const thirds = screenWidth / 3 - .1;
 
-
+interface userProfile {
+  id: string;
+  user_name: string;
+  first_name?: string;
+  last_name?: string;
+  dom_hand: string;
+}
 
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
-  const {logout, profile} = useAuth();
+  const {id} = useLocalSearchParams();
+  const [user, setUser] = useState<userProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [isLeft, setIsLeft] = useState<boolean>(false);
   const [isRight, setIsRight] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchData = async() => {
+    if (id) {
+      fetchData(id as string);
+    }
+  }, [id]);
+
+    const fetchData = async(userId: string) => {
+      try {
+      setLoading(true); // Start loading
+
       const {data, error} = await supabase
         .from('profile')
-        .select('dom_hand, user_name')
-        .eq('id', profile?.id)
+        .select('id, user_name, dom_hand, first_name, last_name')
+        .eq('id', userId)
         .single();
-
-        console.log('Fetched profile data:', profile.dom_hand);
 
       if (error) {
         console.error('Error fetching profile:', error);
         return;
       }
+      
+      // CORRECT: Set the fetched data to the user state
+      if (data) {
+        setUser(data);
 
-
-      if (data?.dom_hand === 'right') {
-        setIsRight(true);
-        setIsLeft(false);
-      } else if (data?.dom_hand === 'left') {
-        setIsRight(false);
-        setIsLeft(true);
-      } else {
-        setIsRight(false);
-        setIsLeft(false);
+        // Update dominant hand state based on fetched data
+        if (data.dom_hand === 'right') {
+          setIsRight(true);
+          setIsLeft(false);
+        } else if (data.dom_hand === 'left') {
+          setIsRight(false);
+          setIsLeft(true);
+        } else {
+          setIsRight(false);
+          setIsLeft(false);
+        }
       }
+    } catch (error: any) {
+      console.error('Error fetching profile:', error.message);
+    } finally {
+      setLoading(false); // End loading regardless of success or failure
+    }
     };
 
-    fetchData();
-  }, [profile]);
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading profile...</Text>
+      </View>
+    );
+  }
 
-  function handlePress() {
-    router.push('edit');
-  };
+  if (!user) {
+    return (
+      <View>
+        <Text>User not found.</Text>
+      </View>
+    );
+  }
+
+  console.log(user);
 
   return (
     <View style={{flex: 1}}>
@@ -66,16 +102,16 @@ export default function Profile(): React.JSX.Element {
           </Pressable> 
           Grand Hand Slam{' '}
         </Text>
-        <Pressable onPress={() => handlePress()} >
+        <Pressable>
           <View style={styles.pic} >
-            <Text style={styles.create}>{profile?.first_name ? '' : 'create Profile'}</Text>
+            <Text style={styles.create}>{user?.first_name ? '' : 'create Profile'}</Text>
           </View>
         </Pressable>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
             {isLeft ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
             </View>
-          <Text style={styles.user}>{profile?.user_name ?? 'Welcome'}</Text>
+          <Text style={styles.user}>{user?.user_name ?? 'Welcome'}</Text>
           <View style={styles.right}>
             {isRight ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
           </View>
@@ -94,7 +130,7 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.item}>following</Text>
           </View>
         </View>
-        <Text style={styles.bio}>{profile?.last_name ? '' : 'Create a profile to begin playing the game.'}</Text>
+        <Text style={styles.bio}>{user?.last_name ? '' : 'Create a profile to begin playing the game.'}</Text>
         <View style={styles.vBorder}>
           <View style={styles.portrait}>
             <Text style={styles.vids}> 4</Text>
