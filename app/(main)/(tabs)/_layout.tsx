@@ -16,6 +16,7 @@ const _layout = () => {
   profile: require('../../../assets/profile.png'),
   feed: require('../../../assets/feed.png'),
   leaderboard: require('../../../assets/trophy.png'),
+  search: require('../../../assets/search.png'),
   rules: require('../../../assets/rules.png'),
   } ;
 
@@ -69,6 +70,17 @@ const _layout = () => {
         tabBarIcon: ({color, size}) => (
           <TabIcon 
             icon={icons.leaderboard} 
+            color={color} 
+            size={size}/>
+        )
+      }}/>
+            <Tabs.Screen  
+      name='(search)/index'
+      options={{
+        title: 'search',
+        tabBarIcon: ({color, size}) => (
+          <TabIcon 
+            icon={icons.search} 
             color={color} 
             size={size}/>
         )
