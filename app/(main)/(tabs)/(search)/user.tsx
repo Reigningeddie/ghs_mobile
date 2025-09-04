@@ -62,9 +62,7 @@ export default function Profile(): React.JSX.Element {
         <View style={styles.banner} />
         <Text style={styles.txt}>
           <Pressable onPress={() => router.back()}>
-            <View>
-              <Image source={require('../../../../assets/back.png')} style={styles.settings}/>
-            </View>
+            <Image source={require('../../../../assets/back.png')} style={styles.settings}/>
           </Pressable> 
           Grand Hand Slam{' '}
         </Text>

@@ -5,8 +5,10 @@ import {
   View,
   TextInput,
   Pressable,
-  Alert
+  Alert,
+  Image
 } from 'react-native';
+import {useRouter} from 'expo-router';
 import {useAuth} from '../../../../database/authContext';
 
 
@@ -14,6 +16,7 @@ import {useAuth} from '../../../../database/authContext';
 //! add user already exists alerts to userName, email, and mobile Number.
 
 export default function SignUp(): React.JSX.Element {
+  const router = useRouter();
   const [firstName, setFirst] = useState<string | undefined>(undefined);
   const [lastName, setLast] = useState<string | undefined>(undefined);
   const [userName, setUser] = useState<string | undefined>(undefined);
@@ -85,7 +88,14 @@ export default function SignUp(): React.JSX.Element {
 
   return (
     <View style={styles.body}>
-      <Text style={styles.txt}>Edit your profile</Text>
+      <View style={styles.header}>
+        <Pressable onPress={() => router.back()} style={styles.pressable}>
+          <Image source={require('../../../../assets/back.png')} />
+          <Text style={styles.backText}>Back</Text>
+        </Pressable>
+      </View>
+      <View style={styles.content}>
+<Text style={styles.txt}>Edit your profile</Text>
       <Pressable>
         <View style={styles.pic}/>
       </Pressable>
@@ -176,6 +186,7 @@ export default function SignUp(): React.JSX.Element {
       <Pressable style={styles.btn} onPress={handleSubmit}>
         <Text style={styles.signUp}>Update</Text>
       </Pressable>
+      </View>
     </View>
   );
 }
@@ -183,10 +194,26 @@ export default function SignUp(): React.JSX.Element {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
+  },
+  header: {
+    backgroundColor: '#284B63',
+    width: '100%',
+    height: 60,
     justifyContent: 'center',
+  },
+  pressable: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-
+  backText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  content: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  },
   txt: {
     color: '#1B1B1B',
     fontSize: 30,

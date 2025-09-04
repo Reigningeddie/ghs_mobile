@@ -14,6 +14,7 @@ const _layout = () => {
       name='edit'
       options={{
         title: 'Back',
+        headerShown: false,
       }}
       />
     </Stack>
