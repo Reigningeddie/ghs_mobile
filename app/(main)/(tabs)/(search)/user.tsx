@@ -4,7 +4,6 @@ import {Dimensions} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { userProfile } from '../../../../database/userContext';
 import { useAuth } from '../../../../database/authContext';
-// import type {NavProps} from '../types/types';
 
 //Get device Width
 const screenWidth = Dimensions.get('window').width;
@@ -22,7 +21,7 @@ export default function Profile(): React.JSX.Element {
   const handleScore = () => {
     if (authUser?.id) {
       addPoints(authUser.id, 10);
-      Alert.alert('you just grand Hand Slammed Credz');
+      Alert.alert(`you just grand Hand Slammed ${user?.user_name}`);
     }
   };
 
