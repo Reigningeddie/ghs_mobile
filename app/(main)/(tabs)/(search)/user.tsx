@@ -3,7 +3,7 @@ import {useRouter} from 'expo-router';
 import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { supabase } from '../../../../database/supabase';
+import { useUserProfile } from '../../../../database/userProfile';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -24,73 +24,10 @@ interface userProfile {
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {id} = useLocalSearchParams();
-  const [user, setUser] = useState<userProfile | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const {user, loading, error} = useUserProfile(id as string);
 
-  const [isLeft, setIsLeft] = useState<boolean>(false);
-  const [isRight, setIsRight] = useState<boolean>(false);
+  console.log('User Data:', user);
 
-  useEffect(() => {
-    if (id) {
-      fetchData(id as string);
-    }
-  }, [id]);
-
-    const fetchData = async(userId: string) => {
-      try {
-      setLoading(true); // Start loading
-
-      const {data, error} = await supabase
-        .from('profile')
-        .select('id, user_name, dom_hand, first_name, last_name')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching profile:', error);
-        return;
-      }
-      
-      // CORRECT: Set the fetched data to the user state
-      if (data) {
-        setUser(data);
-
-        // Update dominant hand state based on fetched data
-        if (data.dom_hand === 'right') {
-          setIsRight(true);
-          setIsLeft(false);
-        } else if (data.dom_hand === 'left') {
-          setIsRight(false);
-          setIsLeft(true);
-        } else {
-          setIsRight(false);
-          setIsLeft(false);
-        }
-      }
-    } catch (error: any) {
-      console.error('Error fetching profile:', error.message);
-    } finally {
-      setLoading(false); // End loading regardless of success or failure
-    }
-    };
-
-  if (loading) {
-    return (
-      <View>
-        <Text>Loading profile...</Text>
-      </View>
-    );
-  }
-
-  if (!user) {
-    return (
-      <View>
-        <Text>User not found.</Text>
-      </View>
-    );
-  }
-
-  console.log(user);
 
   return (
     <View style={{flex: 1}}>
@@ -109,11 +46,11 @@ export default function Profile(): React.JSX.Element {
         </Pressable>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
-            {isLeft ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
+            {user?.dom_hand === 'left' ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
             </View>
           <Text style={styles.user}>{user?.user_name ?? 'Welcome'}</Text>
           <View style={styles.right}>
-            {isRight ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
+            {user?.dom_hand === 'right' ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
           </View>
         </View>
         <View style={styles.flex}>
