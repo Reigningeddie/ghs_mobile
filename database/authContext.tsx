@@ -11,6 +11,7 @@ type AuthContextType = {
   signUp: (email: string, password: string) => Promise<{data:any; error?: any}>;
   login: (email: string, password: string) => Promise<{data: any; error?: any}>;
   fetchProfile: (id: string) => Promise<{data: any, error?: any}>;
+  addPoints: (userId: string, amount: number) => Promise<{data: any; error?: any}>;
   update: (first_name?: string, last_name?: string, user_name?: string, mobile_number?: string, dom_hand?: string) => Promise<{data: any; error?: any}>;
   logout: () => Promise<void>;
   err: string | null;
@@ -140,6 +141,42 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     }
   };
 
+  const addPoints = async (userId: string, amount: number) => {
+    try {
+      // Fetch the current profile to get the points
+      const { data: currentProfile, error: fetchError } = await supabase
+          .from('profile')
+          .select('points, user_name') // You need to select 'user_name' to upsert it
+          .eq('id', userId)
+          .single();
+
+      if (fetchError) {
+          throw fetchError;
+      }
+      
+      const currentPoints = currentProfile?.points || 0;
+      const newPoints = currentPoints + amount;
+      
+      // Upsert the new points
+      const { data, error: updateError } = await supabase
+          .from('profile')
+          .upsert({ id: userId, points: newPoints, user_name: currentProfile.user_name })
+          .select()
+          .single();
+          
+      if (updateError) {
+          throw updateError;
+      }
+
+      // Update the local state in the context
+      setProfile(data);
+      
+      return { data, error: null };
+    } catch (error: any) {
+      console.error('Error adding points:', error.message);
+      return { data: null, error: { message: error.message } };
+    }
+  };
 
   const update = async (
     firstName?: string,
@@ -196,7 +233,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
   };
 
   return (
-    <AuthContext.Provider value={{authUser, profile, isLoading, signUp, fetchProfile, update, login, logout, err}}>
+    <AuthContext.Provider value={{authUser, profile, isLoading, signUp, fetchProfile, addPoints, update, login, logout, err}}>
       {!isLoading ? children : <View style={styles.view}><Text style={styles.loading}>Loading...</Text></View>  }
     </AuthContext.Provider>
   );

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase';
 
-interface userProfile {
+interface profileTable {
   id: string;
   user_name: string;
   first_name?: string;
@@ -11,9 +11,10 @@ interface userProfile {
 };
 
 export const userProfile = (userId: string) => {
-  const [user, setUser] = useState<userProfile | null>(null);
+  const [user, setUser] = useState<profileTable | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (!userId) {
@@ -34,7 +35,7 @@ export const userProfile = (userId: string) => {
           
         if (fetchError) throw fetchError;
 
-        const typedData: userProfile = data as userProfile;
+        const typedData: profileTable = data as profileTable;
         setUser(typedData || null);
       } catch (err: any) {
         setError(err.message);

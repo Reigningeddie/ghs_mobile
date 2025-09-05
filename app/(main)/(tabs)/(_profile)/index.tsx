@@ -1,9 +1,7 @@
 import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
 import {useRouter} from 'expo-router';
-import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import {useAuth} from '../../../../database/authContext';
-import { supabase } from '../../../../database/supabase';
 // import type {NavProps} from '../types/types';
 
 //Get device Width

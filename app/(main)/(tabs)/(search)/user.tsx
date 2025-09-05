@@ -2,7 +2,8 @@ import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react
 import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { userProfile } from '../../../../database/profileContext';
+import { userProfile } from '../../../../database/userContext';
+import { useAuth } from '../../../../database/authContext';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -16,6 +17,14 @@ export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {id} = useLocalSearchParams();
   const {user, loading, error} = userProfile(id as string);
+  const { authUser, addPoints } = useAuth();
+
+  const handleScore = () => {
+    if (authUser?.id) {
+      addPoints(authUser.id, 10);
+      Alert.alert('you just grand Hand Slammed Credz');
+    }
+  };
 
   const displayPoints = user?.points ?? 0;
 
@@ -43,7 +52,7 @@ export default function Profile(): React.JSX.Element {
           </Pressable> 
           Grand Hand Slam{' '}
         </Text>
-        <Pressable>
+        <Pressable onPress={handleScore}>
           <View style={styles.pic} >
             <Text style={styles.create}>{user?.first_name ? '' : 'create Profile'}</Text>
           </View>
