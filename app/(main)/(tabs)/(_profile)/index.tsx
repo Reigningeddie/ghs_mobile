@@ -18,39 +18,8 @@ const thirds = screenWidth / 3 - .1;
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {logout, profile} = useAuth();
-  const [isLeft, setIsLeft] = useState<boolean>(false);
-  const [isRight, setIsRight] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async() => {
-      const {data, error} = await supabase
-        .from('profile')
-        .select('dom_hand, user_name')
-        .eq('id', profile?.id)
-        .single();
-
-        console.log('Fetched profile data:', profile.dom_hand);
-
-      if (error) {
-        console.error('Error fetching profile:', error);
-        return;
-      }
-
-
-      if (data?.dom_hand === 'right') {
-        setIsRight(true);
-        setIsLeft(false);
-      } else if (data?.dom_hand === 'left') {
-        setIsRight(false);
-        setIsLeft(true);
-      } else {
-        setIsRight(false);
-        setIsLeft(false);
-      }
-    };
-
-    fetchData();
-  }, [profile]);
+  
+  const displayPoints = profile?.points ?? 0;
 
   function handleLogout() {
     logout();
@@ -75,21 +44,21 @@ export default function Profile(): React.JSX.Element {
         </Text>
         <Pressable onPress={() => handlePress()} >
           <View style={styles.pic} >
-            <Text style={styles.create}>{profile?.first_name ? '' : 'create Profile'}</Text>
+            <Text style={styles.create}>{profile?.user_name ? '' : 'create Profile'}</Text>
           </View>
         </Pressable>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
-            {isLeft ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
+            {profile?.dom_hand === 'left' ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>)}
             </View>
           <Text style={styles.user}>{profile?.user_name ?? 'Welcome'}</Text>
           <View style={styles.right}>
-            {isRight ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
+            {profile?.dom_hand === 'right' ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
           </View>
         </View>
         <View style={styles.flex}>
           <View style={styles.grid}>
-            <Text style={styles.num}>150</Text>
+            <Text style={styles.num}>{displayPoints}</Text>
             <Text style={styles.item}>points</Text>
           </View>
           <View style={styles.grid}>
@@ -101,7 +70,7 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.item}>following</Text>
           </View>
         </View>
-        <Text style={styles.bio}>{profile?.last_name ? '' : 'Create a profile to begin playing the game.'}</Text>
+        <Text style={styles.bio}>{profile?.user_name ? '' : 'Create a profile to begin playing the game.' }</Text>
         <View style={styles.vBorder}>
           <View style={styles.portrait}>
             <Text style={styles.vids}> 4</Text>

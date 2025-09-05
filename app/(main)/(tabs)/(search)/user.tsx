@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
 import {useRouter} from 'expo-router';
-import React, {useState, useEffect, use} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { supabase } from '../../../../database/supabase';
