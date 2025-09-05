@@ -13,21 +13,26 @@ const screenHeight = Dimensions.get('window').height;
 const videoBorder = screenHeight / 2.5
 const thirds = screenWidth / 3 - .1;
 
-interface userProfile {
-  id: string;
-  user_name: string;
-  first_name?: string;
-  last_name?: string;
-  dom_hand: string;
-}
-
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {id} = useLocalSearchParams();
   const {user, loading, error} = useUserProfile(id as string);
 
-  console.log('User Data:', user);
+  const displayPoints = user?.points ?? 0;
 
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Loading profile...</Text>
+      </View>
+    );
+  } if (error) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Error loading profile: {error}</Text>
+      </View>
+    );
+  } 
 
   return (
     <View style={{flex: 1}}>
@@ -55,7 +60,7 @@ export default function Profile(): React.JSX.Element {
         </View>
         <View style={styles.flex}>
           <View style={styles.grid}>
-            <Text style={styles.num}>150</Text>
+            <Text style={styles.num}>{displayPoints}</Text>
             <Text style={styles.item}>points</Text>
           </View>
           <View style={styles.grid}>

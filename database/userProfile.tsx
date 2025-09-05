@@ -7,6 +7,7 @@ interface userProfile {
   first_name?: string;
   last_name?: string;
   dom_hand: string;
+  points: number;
 }
 
 export const useUserProfile = (userId: string) => {
@@ -27,7 +28,7 @@ export const useUserProfile = (userId: string) => {
 
         const { data, error: fetchError } = await supabase
           .from('profile')
-          .select('id, user_name, dom_hand, first_name, last_name')
+          .select('*')
           .eq('id', userId)
           .single();
           
