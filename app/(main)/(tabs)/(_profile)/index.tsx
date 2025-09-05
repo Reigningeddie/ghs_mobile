@@ -13,8 +13,6 @@ const screenHeight = Dimensions.get('window').height;
 const videoBorder = screenHeight / 2.5
 const thirds = screenWidth / 3 - .1;
 
-
-
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {logout, profile} = useAuth();

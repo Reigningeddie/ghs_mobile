@@ -8,9 +8,9 @@ interface userProfile {
   last_name?: string;
   dom_hand: string;
   points: number;
-}
+};
 
-export const useUserProfile = (userId: string) => {
+export const userProfile = (userId: string) => {
   const [user, setUser] = useState<userProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +45,8 @@ export const useUserProfile = (userId: string) => {
 
     fetchUserProfile();
   }, [userId]);
+
+
 
   return { user, loading, error };
 };

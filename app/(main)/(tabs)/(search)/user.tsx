@@ -1,9 +1,8 @@
-import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react-native';
 import {useRouter} from 'expo-router';
-import React, {useState, useEffect} from 'react';
 import {Dimensions} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useUserProfile } from '../../../../database/userProfile';
+import { userProfile } from '../../../../database/profileContext';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -16,7 +15,7 @@ const thirds = screenWidth / 3 - .1;
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {id} = useLocalSearchParams();
-  const {user, loading, error} = useUserProfile(id as string);
+  const {user, loading, error} = userProfile(id as string);
 
   const displayPoints = user?.points ?? 0;
 
