@@ -9,6 +9,12 @@ function LayoutInner() {
   const isDark = scheme === "dark";
   const backgroundColor = isDark ? "#1A1A1A" : "#fff";
 
+  // route logs to console run:
+  //* npx expo start -c
+const originalConsoleLog = console.log;
+console.log = (...args) => {
+  originalConsoleLog(...args);
+};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }}>
