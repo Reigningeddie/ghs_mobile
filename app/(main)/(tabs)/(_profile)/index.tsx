@@ -29,8 +29,8 @@ export default function Profile(): React.JSX.Element {
   return (
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.banner} />
-        <Text style={styles.txt}>
+        <View style={styles.banner}>
+          <Text style={styles.txt}>
           Grand Hand Slam{' '}
           <Pressable onPress={() => handleLogout()}>
             <View>
@@ -43,6 +43,7 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.create}>{profile?.user_name ? '' : 'create Profile'}</Text>
           </View>
         </Pressable>
+        </View>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
             {profile?.dom_hand === 'left' ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>)}
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     alignItems: 'center',
     width: screenWidth,
-    flexGrow: 1,
+    flex: 1,
   },
   banner: {
     backgroundColor: '#284B63',
@@ -93,7 +94,6 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: '#D9D9D9',
-    marginTop: -120,
     fontSize: 47,
     fontWeight: 'bold',
   },

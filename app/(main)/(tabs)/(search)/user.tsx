@@ -111,18 +111,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%',
-    marginTop: -120,
-    zIndex: 1,
+    marginTop: -125,
+    marginBottom: 10,
+    marginLeft: -10,
+    width: '105%'
   },
   icons: {
-    height: 40,
-    width: 40,
+    height: 4,
+    width: 45,
     alignItems: 'center',
     justifyContent: 'center',
   },
   txt: {
-    fontSize: 42,
+    fontSize: 40,
     fontWeight: 'bold',
     color: '#D9D9D9',
 
