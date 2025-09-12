@@ -32,8 +32,8 @@ export default function Profile(): React.JSX.Element {
         <View style={styles.banner} >
           <View style={styles.txtContainer}>
           <Text style={styles.txt}>Grand Hand Slam</Text>
-          <Pressable onPress={() => handleLogout()} style={styles.settings}>
-            <Image source={require('../../../../assets/settings.png')}/>
+          <Pressable onPress={() => handleLogout()} >
+            <Image source={require('../../../../assets/settings.png')} style={styles.settings}/>
           </Pressable> 
         </View>
         </View>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   txtContainer: {
     flexDirection: 'row',
-    width: '100%',
+    width: '99%',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   settings: {
+    height: 35
   },
   pic: {
     backgroundColor: '#3C6E71',
