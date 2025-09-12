@@ -29,21 +29,20 @@ export default function Profile(): React.JSX.Element {
   return (
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.banner}>
-          <Text style={styles.txt}>
-          Grand Hand Slam{' '}
-          <Pressable onPress={() => handleLogout()}>
-            <View>
-              <Image source={require('../../../../assets/settings.png')} style={styles.settings}/>
-            </View>
+        <View style={styles.banner} >
+          <View style={styles.txtContainer}>
+          <Text style={styles.txt}>Grand Hand Slam</Text>
+          <Pressable onPress={() => handleLogout()} style={styles.settings}>
+            <Image source={require('../../../../assets/settings.png')}/>
           </Pressable> 
-        </Text>
+        </View>
+        </View>
+        
         <Pressable onPress={() => handlePress()} >
           <View style={styles.pic} >
             <Text style={styles.create}>{profile?.user_name ? '' : 'create Profile'}</Text>
           </View>
         </Pressable>
-        </View>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
             {profile?.dom_hand === 'left' ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>)}
@@ -85,24 +84,30 @@ const styles = StyleSheet.create({
   contentContainer: {
     alignItems: 'center',
     width: screenWidth,
-    flex: 1,
+    flexGrow: 1,
   },
   banner: {
     backgroundColor: '#284B63',
     width: '100%',
     height: 120,
   },
+  txtContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   txt: {
     color: '#D9D9D9',
-    fontSize: 47,
+    fontSize: 45,
     fontWeight: 'bold',
   },
   settings: {
-    height: 35,
   },
   pic: {
     backgroundColor: '#3C6E71',
     height: 150,
+    marginTop: -50,
     width: 150,
     borderRadius: 80,
     borderColor: '#353535',
