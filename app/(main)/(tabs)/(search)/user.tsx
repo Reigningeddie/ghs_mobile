@@ -45,12 +45,15 @@ export default function Profile(): React.JSX.Element {
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.banner} />
-        <Text style={styles.txt}>
-          <Pressable onPress={() => router.back()}>
-            <Image source={require('../../../../assets/back.png')} style={styles.settings}/>
+        <View style={styles.txtContainer}>
+          <Pressable onPress={() => router.back()} style={styles.icons}>
+            <Image source={require('../../../../assets/back.png')}/>
           </Pressable> 
-          Grand Hand Slam{' '}
-        </Text>
+          <Text style={styles.txt}>Grand Hand Slam</Text> 
+          <Pressable style={styles.icons}>
+            <Image source={require('../../../../assets/addFriend.png')} style={styles.addFriend}/>
+          </Pressable>
+        </View>
         <Pressable onPress={handleScore}>
           <View style={styles.pic} >
             <Text style={styles.create}>{user?.first_name ? '' : 'create Profile'}</Text>
@@ -104,14 +107,29 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 120,
   },
-  txt: {
-    color: '#D9D9D9',
+  txtContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
     marginTop: -120,
-    fontSize: 47,
-    fontWeight: 'bold',
+    zIndex: 1,
   },
-  settings: {
-    height: 35,
+  icons: {
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  txt: {
+    fontSize: 42,
+    fontWeight: 'bold',
+    color: '#D9D9D9',
+
+  },
+  addFriend: {
+    height: 25,
+    width: 25,
   },
   pic: {
     backgroundColor: '#3C6E71',
