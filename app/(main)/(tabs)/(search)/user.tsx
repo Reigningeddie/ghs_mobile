@@ -25,7 +25,11 @@ export default function Profile(): React.JSX.Element {
     }
   };
 
+  console.log(user)
+  
+
   const displayPoints = user?.points ?? 0;
+
 
   if (loading) {
     return (

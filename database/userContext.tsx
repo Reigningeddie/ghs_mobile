@@ -32,6 +32,7 @@ export const userProfile = (userId: string) => {
           .select('*')
           .eq('id', userId)
           .single();
+
           
         if (fetchError) throw fetchError;
 
@@ -43,9 +44,11 @@ export const userProfile = (userId: string) => {
         setLoading(false);
       }
     };
-
+    
     fetchUserProfile();
   }, [userId]);
+
+  
 
 
 
