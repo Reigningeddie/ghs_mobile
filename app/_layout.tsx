@@ -18,7 +18,7 @@ function LayoutInner() {
         <Stack.Screen name="(main)" />
       </Stack>
     </SafeAreaView>
-  );
+  ); 
 }
 
 export default function Layout() {
