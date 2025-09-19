@@ -56,7 +56,8 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state change event:', event);
       if (event === 'SIGNED_IN') {
-        setAuthUser(session?.user);
+        setAuthUser(session?.user?.id);
+
       } else if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') {
         setAuthUser(null);
         setProfile(null);
@@ -69,23 +70,45 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    setIsLoading(true);
-    setErr(null);
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+  setIsLoading(true);
+  setErr(null);
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      // options: {
+      //   // Do not add large data to user_metadata
+      //   // Only include essential metadata like userName
+      //   data: { user_name: userName },
+      // },
+    });
 
-      return { data, error};
-    } catch (error) {
-      console.error('Sign up Failed', error);
-      setErr(error instanceof Error ? error.message : 'An unknown error occurred during sign up');
-      return { data: null, error };
-    } finally {
-      setIsLoading(false);
+    if (error) {
+      throw new Error(error.message);
     }
-  };
+
+    // After successful sign-up, create a profile entry
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from('profile')
+        .insert({ id: data.user.id});
+
+      if (profileError) {
+        throw new Error(profileError.message);
+      }
+    }
+
+    // ... rest of your existing logic
+    // Provide user feedback (email confirmation etc.)
+    return { data, error: null };
+  } catch (error) {
+    console.error('Sign up Failed', error);
+    setErr(error instanceof Error ? error.message : 'An unknown error occurred during sign up');
+    return { data: null, error };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const login = async (
     email: string,
