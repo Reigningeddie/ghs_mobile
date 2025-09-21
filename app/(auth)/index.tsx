@@ -77,6 +77,8 @@ export default function Login(): React.JSX.Element {
       if (!data.session) {
         throw new Error('No session returned after login');
       }
+
+      console.log(data)
       console.log('Login successful!');
       router.replace('/(main)')
       // navigation.navigate('BottomTabs');
