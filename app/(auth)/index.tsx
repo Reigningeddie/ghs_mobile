@@ -146,7 +146,8 @@ export default function Login(): React.JSX.Element {
           placeholderTextColor="white"
           value={emailValue}
           onChangeText={input => 
-            setEmail(input)}/>
+            setEmail(input)}
+            />
         {errors.email && <Text style={styles.require}>{errors.email}</Text>}
         <TextInput
           style={styles.input}
@@ -155,11 +156,7 @@ export default function Login(): React.JSX.Element {
           placeholderTextColor="white"
           value={passwordValue}
           onChangeText={input => setPassword(input)}
-          onFocus={() => {
-            if (scrollViewRef.current) {
-              scrollViewRef.current.scrollToEnd({ animated: true });
-            }
-          }}/>
+          />
         {errors.password && <Text style={styles.require}>{errors.password}</Text>}
         {isSignUp && (
           <TextInput
@@ -169,7 +166,11 @@ export default function Login(): React.JSX.Element {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={true}
-            />
+            onFocus={() => {
+              if (scrollViewRef.current) {
+                scrollViewRef.current.scrollToEnd({ animated: true });
+              }
+            }}/>
             )}
             {errors.confirmPassword && <Text style={styles.require}>{errors.confirmPassword}</Text>}
         
