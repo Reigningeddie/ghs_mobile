@@ -1,5 +1,5 @@
-import {useRouter} from 'expo-router';
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {useAuth} from '../../database/authContext';
+import { useAuth } from '../../database/authContext';
 
 export default function Login(): React.JSX.Element {
   const [emailValue, setEmail] = useState('');
@@ -23,6 +23,7 @@ export default function Login(): React.JSX.Element {
   const [errors, setErrors] = useState<{email?: string; password?: string; confirmPassword?: string;}>({})
   const [modalVisible, setModalVisible] = useState(false);
   const [rulesVisible, setRulesVisible] = useState(false);
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
   const {login, signUp} = useAuth();
 
@@ -112,7 +113,8 @@ export default function Login(): React.JSX.Element {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-      <ScrollView contentContainerStyle={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}
+        ref={scrollViewRef}>
         <Image source={require('../../assets/logo.png')} />
         {isSignUp && <Text style={styles.signUp}>Sign Up</Text>}
         <Modal 
@@ -152,7 +154,12 @@ export default function Login(): React.JSX.Element {
           placeholder={'Password'}
           placeholderTextColor="white"
           value={passwordValue}
-          onChangeText={input => setPassword(input)}/>
+          onChangeText={input => setPassword(input)}
+          onFocus={() => {
+            if (scrollViewRef.current) {
+              scrollViewRef.current.scrollToEnd({ animated: true });
+            }
+          }}/>
         {errors.password && <Text style={styles.require}>{errors.password}</Text>}
         {isSignUp && (
           <TextInput
@@ -161,7 +168,8 @@ export default function Login(): React.JSX.Element {
             placeholderTextColor='white'
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            secureTextEntry={true}/>
+            secureTextEntry={true}
+            />
             )}
             {errors.confirmPassword && <Text style={styles.require}>{errors.confirmPassword}</Text>}
         
@@ -222,50 +230,42 @@ export default function Login(): React.JSX.Element {
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000',
   },
-  // Incorrect
   container: {
     flex: 1,
-    backgroundColor: 'white' // <-- Missing comma here!
   },
-
   signUp: {
     fontSize: 25,
     marginBottom: 16,
     color: 'white'
   },
-
   mFormat: {
     alignItems: 'center',
   },
-
   modal: {
     justifyContent: 'center',
     height: '100%',
     padding: 12,
     backgroundColor: '#00308F'
   },
-
   modalTxt: {
     color: 'white',
     fontSize: 19,
   },
-
   intro: {
     textAlign: 'justify',
   },
-
   scroll: {
     flexGrow: 1,
     alignItems: 'center',
   },
-
   btn: {
     backgroundColor: '#FFBF00',
     width: 150,
@@ -276,23 +276,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     margin: '10%',
   },
-
   btnLayout: {
     flexDirection: 'row',
     margin: '5%',
   },
-  
   btnTxt: {
     color: 'black',
   },
-
   keyboardInputFormat: {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 40,
   },
-
   title: {
     color: 'white',
     marginBottom: 40,
@@ -300,7 +296,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     
   },
-
   input: {
     color: 'white',
     fontSize: 15,
@@ -311,7 +306,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
   },
-
   loginBtn: {
     backgroundColor: '#2EA1DD',
     width: 150,
@@ -321,21 +315,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
-
   loginTxt: {
     fontSize: 15,
     color: 'aliceblue',
   },
-
   text: {
     fontSize: 14,
     color: 'white',
   },
-
   signUpTxt: {
     color: '#2EA1DD',
   },
-
   require: {
     color: 'red',
     marginTop: -15,
