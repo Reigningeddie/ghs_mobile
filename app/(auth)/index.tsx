@@ -24,6 +24,7 @@ export default function Login(): React.JSX.Element {
   const [modalVisible, setModalVisible] = useState(false);
   const [rulesVisible, setRulesVisible] = useState(false);
   const scrollViewRef = useRef<ScrollView | null>(null);
+  const [focused, setFocused] = useState<boolean>(false);
 
   const {login, signUp} = useAuth();
 
@@ -111,7 +112,7 @@ export default function Login(): React.JSX.Element {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior='padding'
       style={styles.container}>
       <ScrollView contentContainerStyle={styles.body}
         ref={scrollViewRef}>
@@ -147,6 +148,15 @@ export default function Login(): React.JSX.Element {
           value={emailValue}
           onChangeText={input => 
             setEmail(input)}
+          onFocus={() => {
+            setFocused(true);
+            setTimeout(() => {
+              if (scrollViewRef.current) {
+                scrollViewRef.current.scrollToEnd({ animated: true });
+                }
+              }, 100);
+            }}
+          onBlur={() => {setFocused(false)}}
             />
         {errors.email && <Text style={styles.require}>{errors.email}</Text>}
         <TextInput
@@ -156,7 +166,8 @@ export default function Login(): React.JSX.Element {
           placeholderTextColor="white"
           value={passwordValue}
           onChangeText={input => setPassword(input)}
-          />
+          onFocus={() => {setFocused(true)}}
+          onBlur={() => {setFocused(false)}} />
         {errors.password && <Text style={styles.require}>{errors.password}</Text>}
         {isSignUp && (
           <TextInput
@@ -166,15 +177,12 @@ export default function Login(): React.JSX.Element {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={true}
-            onFocus={() => {
-              if (scrollViewRef.current) {
-                scrollViewRef.current.scrollToEnd({ animated: true });
-              }
-            }}/>
+            onFocus={() => {setFocused(true)}}
+            onBlur={() => {setFocused(false)}}/>
             )}
             {errors.confirmPassword && <Text style={styles.require}>{errors.confirmPassword}</Text>}
         
-        <Pressable style={styles.loginBtn} onPress={isSignUp ? handleSignUp : handleLogin}>
+        <Pressable style={[styles.loginBtn, focused && styles.focusedInput]} onPress={isSignUp ? handleSignUp : handleLogin}>
           <Text style={styles.loginTxt}>{isSignUp ? 'SignUp' : 'Login'}</Text>
         </Pressable>
         <Text style={styles.text}>
@@ -306,6 +314,9 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: 5,
     marginBottom: 15,
+  },
+  focusedInput: {
+    marginTop: 30
   },
   loginBtn: {
     backgroundColor: '#2EA1DD',
