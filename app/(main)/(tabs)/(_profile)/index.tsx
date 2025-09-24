@@ -31,8 +31,8 @@ export default function Profile(): React.JSX.Element {
     // Show alert if profile is not complete
     if (profile && !isProfileComplete) {
       Alert.alert(
-        '🎯 Complete Your Profile',
-        'You need to complete your profile before you can play Grand Hand Slam!\n\nRequired:\n• Username (6+ characters)\n• First Name\n• Dominant Hand',
+        "🎯 Don't forget to sign up",
+        'Please complete your profile to start playing.',
         [
           {
             text: 'Later',
