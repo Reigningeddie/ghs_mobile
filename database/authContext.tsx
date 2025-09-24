@@ -52,6 +52,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
 		try {
 			const { data, error } = await supabase.auth.signUp({ email, password });
 			if (error) throw error;
+			console.log(data)
 			return { data, error: null };
 		} catch (error: any) {
 			console.error('Sign up Failed', error);
@@ -93,9 +94,9 @@ const login = async (
 	const fetchProfile = async (id: string) => {
 		try {
 			const { data, error } = await supabase
-				.from('profile')
+				.from('profiles')
 				.select('*')
-				.eq('id', id)
+				.eq('user_id', id)
 				.single();
 
 			if (error) {
@@ -114,9 +115,9 @@ const login = async (
 	const addPoints = async (userId: string, amount: number) => {
 		try {
 			const { data: currentProfile, error: fetchError } = await supabase
-				.from('profile')
-				.select('points, user_name')
-				.eq('id', userId)
+				.from('profiles')
+				.select('id, points, user_name')
+				.eq('user_id', userId)
 				.single();
 
 			if (fetchError) throw fetchError;
@@ -125,8 +126,9 @@ const login = async (
 			const newPoints = currentPoints + amount;
 			
 			const { data, error: updateError } = await supabase
-				.from('profile')
-				.upsert({ id: userId, points: newPoints, user_name: currentProfile.user_name })
+				.from('profiles')
+				.update({ points: newPoints })
+				.eq('id', currentProfile.id)
 				.select()
 				.single();
 				
@@ -150,17 +152,17 @@ const login = async (
 	) => {
 		setErr(null);
 		try {
-			const metadata = {
-				id: authUser.id,
-				first_name: firstName || null,
-				last_name: lastName || null,
-				user_name: userName || null,
-				mobile_number: mobileNumber || null,
-				dom_hand: domHand || null,
-			};
+		const metadata = {
+			user_id: authUser.id,
+			first_name: firstName || null,
+			last_name: lastName || null,
+			user_name: userName || null,
+			mobile_number: mobileNumber || null,
+			dom_hand: domHand || null,
+		};
 
 			const {data: updateUserResult, error: updateError} = await supabase
-				.from('profile')
+				.from('profiles')
 				.upsert(metadata)
 				.select()
 				.single();
