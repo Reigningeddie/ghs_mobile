@@ -2,10 +2,12 @@ import {View, TextInput, StyleSheet, Text, FlatList, Pressable} from 'react-nati
 import React, {useState, useEffect} from 'react';
 import {useRouter} from 'expo-router';
 import {supabase} from '../../../../database/supabase';
+import {useAuth} from '../../../../database/authContext';
 
 // Define the type for the data you're fetching
 interface Profile {
-  id: string;
+  id: number;
+  user_id: string;
   user_name: string;
 }
 
@@ -29,15 +31,21 @@ const useDebounce = <T,>(value: T, delay: number): T => {
 
 const Search = () => {
   const router = useRouter();
+  const { authUser } = useAuth();
   const [query, setQuery] = useState<string>('');
   const [result, setResult] = useState<Profile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  function handlePress(id: string) {
-    router.push({
-      pathname: 'user', 
-      params: {id}
-    });
+  function handlePress(user_id: string) {
+    // If user taps on their own profile, redirect to their profile tab
+    if (user_id === authUser?.id) {
+      router.push('/(main)/(tabs)/(_profile)');
+    } else {
+      router.push({
+        pathname: 'user', 
+        params: {id: user_id}
+      });
+    }
   }
   
   // Debounce the query with a 500ms delay
@@ -56,8 +64,8 @@ const Search = () => {
   const searchDb = async (searchQuery: string) => {
     try {
       const {data, error} = await supabase
-        .from('profile')
-        .select('id, user_name')
+        .from('profiles')
+        .select('id, user_id, user_name')
         .ilike('user_name', `%${searchQuery}%`);
 
       if (error) throw error;
@@ -93,9 +101,9 @@ const Search = () => {
         <FlatList
           style={styles.results}
           data={result}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Pressable onPress={() => handlePress(item.id)} style={styles.userDiv}>
+            <Pressable onPress={() => handlePress(item.user_id)} style={styles.userDiv}>
               <View style={styles.avatar}></View>
               <Text style={styles.users}>{item.user_name}</Text>
             </Pressable>

@@ -16,12 +16,37 @@ export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {id} = useLocalSearchParams();
   const {user, loading, error} = userProfile(id as string);
-  const { authUser, addPoints } = useAuth();
+  const { authUser, addPoints, isProfileComplete } = useAuth();
 
-  const handleScore = () => {
-    if (authUser?.id) {
-      addPoints(authUser.id, 10);
-      Alert.alert(`you just grand Hand Slammed ${user?.user_name}`);
+  const handleScore = async () => {
+    if (!authUser?.id) return;
+    
+    // Check if profile is complete before allowing points
+    if (!isProfileComplete) {
+      Alert.alert(
+        '🎯 Complete Your Profile First',
+        'You need to complete your profile before you can earn points!\n\nRequired:\n• Username (6+ characters)\n• First Name\n• Dominant Hand',
+        [
+          {
+            text: 'Later',
+            style: 'cancel',
+          },
+          {
+            text: 'Complete Profile',
+            onPress: () => router.push('/(main)/(tabs)/(_profile)/edit'),
+            style: 'default',
+          },
+        ]
+      );
+      return;
+    }
+    
+    // Profile is complete, add points
+    const result = await addPoints(authUser.id, 10);
+    if (result.error) {
+      Alert.alert('Error', result.error.message);
+    } else {
+      Alert.alert(`🎉 Grand Hand Slam!`, `You just Grand Hand Slammed ${user?.user_name} and earned 10 points!`);
     }
   };
 

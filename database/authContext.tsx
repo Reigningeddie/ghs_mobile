@@ -116,6 +116,12 @@ const login = async (
 	};
 
 	const addPoints = async (userId: string, amount: number) => {
+		// Check if user's profile is complete before allowing points
+		if (!isProfileComplete) {
+			console.log('Cannot add points: Profile incomplete');
+			return { data: null, error: { message: 'Complete your profile before earning points' } };
+		}
+		
 		try {
 			const { data: currentProfile, error: fetchError } = await supabase
 				.from('profiles')

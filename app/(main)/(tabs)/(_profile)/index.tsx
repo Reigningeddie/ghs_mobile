@@ -1,6 +1,7 @@
-import {StyleSheet, Text, View, ScrollView, Pressable, Image} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
+import React, {useEffect} from 'react';
 import {useAuth} from '../../../../database/authContext';
 // import type {NavProps} from '../types/types';
 
@@ -13,7 +14,7 @@ const thirds = screenWidth / 3 - .1;
 
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
-  const {logout, profile} = useAuth();
+  const {logout, profile, isProfileComplete} = useAuth();
   
   const displayPoints = profile?.points ?? 0;
 
@@ -25,6 +26,27 @@ export default function Profile(): React.JSX.Element {
   function handlePress() {
     router.push('edit');
   };
+
+  useEffect(() => {
+    // Show alert if profile is not complete
+    if (profile && !isProfileComplete) {
+      Alert.alert(
+        '🎯 Complete Your Profile',
+        'You need to complete your profile before you can play Grand Hand Slam!\n\nRequired:\n• Username (6+ characters)\n• First Name\n• Dominant Hand',
+        [
+          {
+            text: 'Later',
+            style: 'cancel',
+          },
+          {
+            text: 'Complete Now',
+            onPress: () => router.push('edit'),
+            style: 'default',
+          },
+        ]
+      );
+    }
+  }, [profile, isProfileComplete, router]);
 
   return (
     <View style={{flex: 1}}>

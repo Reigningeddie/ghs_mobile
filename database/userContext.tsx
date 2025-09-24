@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from './supabase';
 
 interface profileTable {
-  id: string;
+  id: number;
+  user_id: string;
   user_name: string;
   first_name?: string;
   last_name?: string;
@@ -28,9 +29,9 @@ export const userProfile = (userId: string) => {
         setError(null);
 
         const { data, error: fetchError } = await supabase
-          .from('profile')
+          .from('profiles')
           .select('*')
-          .eq('id', userId)
+          .eq('user_id', userId)
           .single();
 
           
