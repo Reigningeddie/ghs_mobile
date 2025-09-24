@@ -53,21 +53,37 @@ export default function SignUp(): React.JSX.Element {
     
     // Validation
     if (!userName || userName.trim().length === 0) { 
-        setErrUserName;
+        setErrUserName('Username is required');
+        hasError = true;
+    } else if (userName.length < 6) {
+        setErrUserName('Username must be at least 6 characters long');
         hasError = true;
     }
     
     if (hasError) return;
 
     try {
-        // await signUp(email, password);
-        await update(
+        console.log('Updating profile with:', {
+            firstName,
+            lastName,
+            userName,
+            mobileNumber,
+            domHand
+        });
+        
+        const result = await update(
             firstName,
             lastName,
             userName,
             mobileNumber,
             domHand,
         );
+        
+        console.log('Update result:', result);
+        
+        if (result.error) {
+            throw new Error(result.error.message);
+        }
         
         // Show success alert
         Alert.alert(
@@ -81,8 +97,8 @@ export default function SignUp(): React.JSX.Element {
             ]
         );
     } catch (error: any) {
-        console.error('Error during sign up:', error);
-        Alert.alert('Error', error.message);
+        console.error('Error during profile update:', error);
+        Alert.alert('Error', error.message || 'Failed to update profile');
     }
 };
 
@@ -146,20 +162,24 @@ export default function SignUp(): React.JSX.Element {
           />
           <View style={styles.toggleAlign}>
             <Text style={styles.toggleText}>Dominant Hand</Text>
-            <Pressable style={styles.toggleContainer}>
-              <Text style={[  styles.toggleBtn, 
-                domHand === 'left' && styles.toggleActive ]}
+            <View style={styles.toggleContainer}>
+              <Pressable 
+                style={[styles.toggleBtn, domHand === 'left' && styles.toggleActive]}
                 onPress={() => setHand('left')}
                 >
-                Left
-              </Text>
-              <Text style={[  styles.toggleBtn, 
-                domHand === 'right' && styles.toggleActive ]}
+                <Text style={[styles.toggleText, domHand === 'left' && styles.toggleActiveText]}>
+                  Left
+                </Text>
+              </Pressable>
+              <Pressable 
+                style={[styles.toggleBtn, domHand === 'right' && styles.toggleActive]}
                 onPress={() => setHand('right')}
                 >
-                Right
-              </Text>
-            </Pressable>
+                <Text style={[styles.toggleText, domHand === 'right' && styles.toggleActiveText]}>
+                  Right
+                </Text>
+              </Pressable>
+            </View>
           </View>
           {/* <TextInput
             style={styles.input}
@@ -308,8 +328,11 @@ const styles = StyleSheet.create({
   },
 
   toggleActive: {
-    color: 'white',
     borderColor: '#2EA1DD',
     backgroundColor: '#2EA1DD',
+  },
+
+  toggleActiveText: {
+    color: 'white',
   },
 });

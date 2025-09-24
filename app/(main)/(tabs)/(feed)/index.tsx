@@ -2,6 +2,11 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 
 const photoWidth = '25%'
 
+
+// const displayTime = new Date(profile.created_at).toLocaleString('en-US', {
+//   timeZone: 'America/Los_Angeles'
+// });
+
 const Feed = () => {
   return (
     <View style={styles.body}>

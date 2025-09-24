@@ -8,6 +8,7 @@ type AuthContextType = {
 	authUser: any;
 	profile: any;
 	isLoading: boolean;
+	isProfileComplete: boolean;
 	signUp: (email: string, password: string) => Promise<{data:any; error?: any}>;
 	login: (email: string, password: string) => Promise<{data: any; error?: any}>;
 	fetchProfile: (id: string) => Promise<{data: any, error?: any}>;
@@ -24,6 +25,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
 	const [profile, setProfile] = useState<any>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [err, setErr] = useState<string | null>(null);
+	const [isProfileComplete, setIsProfileComplete] = useState(false);
 
 	useEffect(() => {
 		const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -105,6 +107,7 @@ const login = async (
 			}
 
 			setProfile(data);
+			checkProfileComplete(data);
 			return { data, error: null };
 		} catch (error: any) {
 			console.error('Error fetching profile:', error);
@@ -152,26 +155,50 @@ const login = async (
 	) => {
 		setErr(null);
 		try {
-		const metadata = {
-			user_id: authUser.id,
-			first_name: firstName || null,
-			last_name: lastName || null,
-			user_name: userName || null,
-			mobile_number: mobileNumber || null,
-			dom_hand: domHand || null,
-		};
-
-			const {data: updateUserResult, error: updateError} = await supabase
+			// Check if profile already exists
+			const { data: existingProfile, error: fetchError } = await supabase
 				.from('profiles')
-				.upsert(metadata)
-				.select()
+				.select('id')
+				.eq('user_id', authUser.id)
 				.single();
+
+			const updateData = {
+				first_name: firstName || null,
+				last_name: lastName || null,
+				user_name: userName || null,
+				mobile_number: mobileNumber || null,
+				dom_hand: domHand || null,
+			};
+
+			let updateUserResult, updateError;
+
+			if (existingProfile) {
+				// Profile exists - update it
+				const result = await supabase
+					.from('profiles')
+					.update(updateData)
+					.eq('user_id', authUser.id)
+					.select()
+					.single();
+				updateUserResult = result.data;
+				updateError = result.error;
+			} else {
+				// Profile doesn't exist - create it
+				const result = await supabase
+					.from('profiles')
+					.insert({ user_id: authUser.id, ...updateData })
+					.select()
+					.single();
+				updateUserResult = result.data;
+				updateError = result.error;
+			}
 
 			if (updateError) {
 				throw new Error(`Error updating user profile: ${updateError.message}`);
 			}
 		
 			setProfile(updateUserResult);
+			checkProfileComplete(updateUserResult);
 			return {data: updateUserResult, error: null};
 		} catch (error: any) {
 			console.error('Error updating profile:', error);
@@ -190,8 +217,22 @@ const login = async (
 		}
 	};
 
+	const checkProfileComplete = (profileData: any) => {
+		if (!profileData) {
+			setIsProfileComplete(false);
+			return;
+		}
+		
+		// Check if required fields are completed
+		const isComplete = !!(profileData.user_name && 
+							 profileData.first_name && 
+							 profileData.dom_hand);
+							 
+		setIsProfileComplete(isComplete);
+	};
+
 	return (
-		<AuthContext.Provider value={{authUser, profile, isLoading, signUp, fetchProfile, addPoints, update, login, logout, err}}>
+		<AuthContext.Provider value={{authUser, profile, isLoading, isProfileComplete, signUp, fetchProfile, addPoints, update, login, logout, err}}>
 			{!isLoading ? children : <View style={styles.view}><Text style={styles.loading}>Loading...</Text></View>  }
 		</AuthContext.Provider>
 	);
