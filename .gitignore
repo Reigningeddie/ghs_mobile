@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+.gitignore
 
 # Expo
 .expo/
@@ -36,3 +37,4 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+.aider*
