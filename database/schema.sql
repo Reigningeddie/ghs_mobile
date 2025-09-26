@@ -1,11 +1,5 @@
--- Create users table
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  first_name VARCHAR(50),
-  last_name VARCHAR(50)
-);
+-- Create users table is not needed as we are using auth.users(id) for foreign key references
+-- Remove the users table and update the friend_pending table to use uuids instead of integers
 
 -- Create friends table
 CREATE TABLE friends (
@@ -22,8 +16,8 @@ CREATE INDEX idx_friends_friend_id ON friends (friend_id);
 -- Create friend_pending table
 CREATE TABLE friend_pending (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id),
-  friend_requester_id INTEGER NOT NULL REFERENCES users(id)
+  user_id uuid NOT NULL REFERENCES auth.users(id) on delete cascade unique not null,
+  friend_requester_id uuid NOT NULL REFERENCES auth.users(id) on delete cascade unique not null
 );
 
 -- Create indexes on friend_pending table
@@ -33,8 +27,8 @@ CREATE INDEX idx_friend_pending_friend_requester_id ON friend_pending (friend_re
 -- Add foreign key constraints to establish relationships between tables
 ALTER TABLE friends ADD CONSTRAINT fk_friends_user_id FOREIGN KEY (user_id) REFERENCES auth.users(id);
 ALTER TABLE friends ADD CONSTRAINT fk_friends_friend_id FOREIGN KEY (friend_id) REFERENCES auth.users(id);
-ALTER TABLE friend_pending ADD CONSTRAINT fk_friend_pending_user_id FOREIGN KEY (user_id) REFERENCES users(id);
-ALTER TABLE friend_pending ADD CONSTRAINT fk_friend_pending_friend_requester_id FOREIGN KEY (friend_requester_id) REFERENCES users(id);
+ALTER TABLE friend_pending ADD CONSTRAINT fk_friend_pending_user_id FOREIGN KEY (user_id) REFERENCES auth.users(id);
+ALTER TABLE friend_pending ADD CONSTRAINT fk_friend_pending_friend_requester_id FOREIGN KEY (friend_requester_id) REFERENCES auth.users(id);
 
 -- Create profiles table
 CREATE TABLE public.profiles (
