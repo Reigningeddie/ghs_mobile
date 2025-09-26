@@ -1,5 +1,5 @@
 -- Create friendships table
-CREATE TABLE friendships (
+CREATE TABLE friend (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
   friend_id INTEGER NOT NULL REFERENCES users(id),
