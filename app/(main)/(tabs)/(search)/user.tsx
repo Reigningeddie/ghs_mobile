@@ -79,7 +79,7 @@ export default function Profile(): React.JSX.Element {
             <Image source={require('../../../../assets/back.png')}/>
           </Pressable> 
           <Text style={styles.txt}>Grand Hand Slam</Text> 
-          <Pressable style={styles.icons}>
+          <Pressable style={styles.icons} onPress={() => handleAddFriend(user?.user_id)}>
             <Image source={require('../../../../assets/addFriend.png')} style={styles.addFriend}/>
           </Pressable>
         </View>
@@ -237,3 +237,38 @@ const styles = StyleSheet.create({
     height: 200,
   },
 });
+
+const handleAddFriend = async (userId: string) => {
+  if (!authUser?.id) return;
+  
+  // Check if user is already friends
+  const { data, error } = await supabase
+    .from('friendships')
+    .select('*')
+    .eq('user_id', authUser.id)
+    .eq('friend_id', userId);
+
+  if (error) {
+    Alert.alert('Error', error.message);
+    return;
+  }
+
+  // If user is already friends, do nothing
+  if (data.length > 0) {
+    Alert.alert('You are already friends with this user!');
+    return;
+  }
+
+  // Add friendship
+  const { data: addedData, error: addError } = await supabase
+    .from('friendships')
+    .insert([{ user_id: authUser.id, friend_id: userId }]);
+
+  if (addError) {
+    Alert.alert('Error', addError.message);
+    return;
+  }
+
+  // If friendship is successful, show success message
+  Alert.alert(`Friend Request Sent!`, `You have sent a friend request to ${userId}!`);
+};
