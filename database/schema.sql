@@ -62,15 +62,29 @@ CREATE POLICY "Users can update own profile"
   ON public.profiles FOR UPDATE 
   USING (auth.uid() = user_id);
 
-CREATE POLICY "Users can insert own profile" 
-  ON public.profiles FOR INSERT 
-  WITH CHECK (auth.uid() = user_id);
+-- The WITH CHECK clause is not allowed in a policy for an INSERT operation
+-- Instead, we'll create a trigger to enforce this rule
+CREATE TRIGGER insert_own_profile_trigger
+BEFORE INSERT ON public.profiles
+FOR EACH ROW EXECUTE FUNCTION public.check_insert_own_profile();
+
+CREATE OR REPLACE FUNCTION public.check_insert_own_profile()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF auth.uid() != NEW.user_id THEN
+    RAISE EXCEPTION 'Only the user can insert their own profile';
+  END IF;
+  RETURN NEW;
+END;
+$$;
 
 -- Create function to handle new user creation
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
-SECURITY DEFINER SET SEARCH_PATH = public
+SECURITY INVOKER SET SEARCH_PATH = public
 AS $$
 BEGIN
   INSERT INTO public.profiles (user_id, points)
