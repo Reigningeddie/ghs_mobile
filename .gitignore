@@ -38,4 +38,4 @@ yarn-error.*
 *.tsbuildinfo
 .aider*
 
-/schema
+schema/
