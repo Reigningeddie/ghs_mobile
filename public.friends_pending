@@ -1,7 +1,0 @@
-CREATE TABLE public.friends_pending (
-  id bigint generated always as identity primary key,
-  user_id uuid references auth.users(id) on delete cascade not null,
-  pending_id uuid references auth.users(id) on delete cascade not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  unique (user_id, pending_id)
-);

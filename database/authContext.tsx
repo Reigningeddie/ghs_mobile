@@ -231,9 +231,9 @@ const login = async (
 		
 		// Check if required fields are completed
 		const isComplete = !!(profileData.user_name && 
-							 profileData.first_name && 
-							 profileData.dom_hand);
-							 
+			profileData.first_name && 
+		profileData.dom_hand);
+
 		setIsProfileComplete(isComplete);
 	};
 
