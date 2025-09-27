@@ -1,3 +1,4 @@
+// database/supabase.tsx
 import { AppState } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
