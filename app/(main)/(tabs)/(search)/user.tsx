@@ -18,6 +18,10 @@ export default function Profile(): React.JSX.Element {
   const {user, loading, error} = userProfile(id as string);
   const { authUser, addPoints, isProfileComplete } = useAuth();
 
+  const addFriend = async () => {
+    Alert.alert('hello')
+  }
+
   const handleScore = async () => {
     if (!authUser?.id) return;
     
@@ -79,8 +83,8 @@ export default function Profile(): React.JSX.Element {
             <Image source={require('../../../../assets/back.png')}/>
           </Pressable> 
           <Text style={styles.txt}>Grand Hand Slam</Text> 
-          <Pressable style={styles.icons}>
-            <Image source={require('../../../../assets/addFriend.png')} style={styles.addFriend}/>
+          <Pressable style={styles.icons} onPress={addFriend}>
+            <Image source={require('../../../../assets/addFriend.png')} style={styles.addFriend} />
           </Pressable>
         </View>
         <Pressable onPress={handleScore}>
