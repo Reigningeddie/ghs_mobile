@@ -96,7 +96,7 @@ export default function Profile(): React.JSX.Element {
         <View style={styles.btns}>
           <Pressable style={styles.btnBorders} onPress={() => move2notifications()} >
             <Image source={require('../../../../assets/notification.png')} />
-            <Text style={styles.notificationTxt}>Notifications</Text>
+            <Text style={styles.notificationTxt}>notifications</Text>
           </Pressable>
         </View>
         <Text style={styles.bio}>{profile?.user_name ? '' : 'Create a profile to begin playing the game.' }</Text>

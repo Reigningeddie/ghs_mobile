@@ -14,13 +14,13 @@ interface friendsTable {
 
 export const friends = () => {
   const {id} = useLocalSearchParams();
-  const { authUser, isLoading: authIsLoading } =useAuth()
-  const {user} = userProfile(id as string)
+  const { authUser } =useAuth()
+  const { user } = userProfile(id as string)
   const [isLoading, setIsLoading] = useState(false)
 
   const add = async () => {
-    if (!authUser.id || (!user as any).user_id) {
-      Alert.alert('User not found');
+    if (!authUser.id || !user?.user_id) {
+      Alert.alert('Error', 'User not found');
       return; 
     }
 
@@ -39,8 +39,7 @@ export const friends = () => {
 
         Alert.alert('Sucess', 'Friend request sent!')
     } catch (error) {
-      Alert.alert('Failed to add friend');
-      console.log('add friend error:', error);
+      Alert.alert('Error', 'Failed to send friend request');
     } finally {
       setIsLoading(false);
     }

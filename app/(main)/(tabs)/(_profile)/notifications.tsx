@@ -1,14 +1,8 @@
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 
-const notifications = () => {
+export default function notifications(): React.JSX.Element {
   const router = useRouter();
-
-  function back() {
-  
-    router.back()
-    console.log('back')
-  }
 
   return (
     <View style={styles.body}>
@@ -20,10 +14,8 @@ const notifications = () => {
       </View>
       <Text>notifications</Text>
     </View>
-  )
+  );
 }
-
-export default notifications
 
 const styles = StyleSheet.create({
   body: {
@@ -43,5 +35,5 @@ const styles = StyleSheet.create({
   backText: {
     color: 'white',
     fontSize: 18
-  }
-})
+  },
+});

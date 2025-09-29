@@ -20,7 +20,7 @@ const _layout = () => {
       <Stack.Screen 
       name='notifications'
       options={{
-        title: 'Back',
+        title: 'notifications',
         headerShown: false,
       }}
       />
