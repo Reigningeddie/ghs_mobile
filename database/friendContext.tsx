@@ -9,7 +9,7 @@ interface friendsTable {
   id: number;
   user_id: string;
   friend_id: string;
-  status: ['pending', 'accepted', 'blocked'];
+  status: 'pending' | 'accepted' | 'blocked';
 };
 
 export const friends = () => {
@@ -24,10 +24,7 @@ export const friends = () => {
       return; 
     }
 
-    
-
     setIsLoading(true);
-
 
     try {
       const {data, error: err} = await supabase
@@ -37,8 +34,10 @@ export const friends = () => {
           friend_id: user?.user_id,
           status: 'pending'
         })
-        Alert.alert('Friend Request sent');
+        
         if (err) throw err;
+
+        Alert.alert('Sucess', 'Friend request sent!')
     } catch (error) {
       Alert.alert('Failed to add friend');
       console.log('add friend error:', error);

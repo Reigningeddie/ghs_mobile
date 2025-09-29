@@ -13,19 +13,19 @@ interface profileTable {
 
 export const userProfile = (userId: string) => {
   const [user, setUser] = useState<profileTable | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
 
   useEffect(() => {
     if (!userId) {
-      setLoading(false);
+      setIsLoading(false);
       return;
     }
 
     const fetchUserProfile = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         setError(null);
 
         const { data, error: fetchError } = await supabase
@@ -42,7 +42,7 @@ export const userProfile = (userId: string) => {
       } catch (err: any) {
         setError(err.message);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     
@@ -53,5 +53,5 @@ export const userProfile = (userId: string) => {
 
 
 
-  return { user, loading, error };
+  return { user, error };
 };
