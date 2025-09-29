@@ -18,8 +18,12 @@ export default function Profile(): React.JSX.Element {
   const {user, loading, error} = userProfile(id as string);
   const { authUser, addPoints, isProfileComplete } = useAuth();
 
+
   const addFriend = async () => {
     Alert.alert('hello')
+    if (!user) {
+      Alert.alert('user not found');
+    }
   }
 
   const handleScore = async () => {
