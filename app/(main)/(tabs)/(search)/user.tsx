@@ -4,6 +4,7 @@ import { Dimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { userProfile } from '../../../../database/userContext';
 import { useAuth } from '../../../../database/authContext';
+import { friends} from '../../../../database/friendContext'
 
 //Get device Width
 const screenWidth = Dimensions.get('window').width;
@@ -14,16 +15,13 @@ const thirds = screenWidth / 3 - .1;
 
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
-  const {id} = useLocalSearchParams();
+  const {id} = useLocalSearchParams(); // user id
+  const {add} = friends();
   const {user, loading, error} = userProfile(id as string);
-  const { authUser, addPoints, isProfileComplete } = useAuth();
-
+  const { authUser, addPoints, isProfileComplete, isLoading } = useAuth();
 
   const addFriend = async () => {
-    Alert.alert('hello')
-    if (!user) {
-      Alert.alert('user not found');
-    }
+    add();
   }
 
   const handleScore = async () => {
@@ -57,9 +55,6 @@ export default function Profile(): React.JSX.Element {
       Alert.alert(`🎉 Grand Hand Slam!`, `You just Grand Hand Slammed ${user?.user_name} and earned 10 points!`);
     }
   };
-
-  console.log(user)
-  
 
   const displayPoints = user?.points ?? 0;
 
