@@ -2,7 +2,6 @@ import {View, TextInput, StyleSheet, Text, FlatList, Pressable} from 'react-nati
 import React, {useState, useEffect} from 'react';
 import {useRouter} from 'expo-router';
 import {supabase} from '../../../../database/supabase';
-import {useAuth} from '../../../../database/authContext';
 
 // Define the type for the data you're fetching
 interface Profile {
@@ -31,21 +30,15 @@ const useDebounce = <T,>(value: T, delay: number): T => {
 
 const Search = () => {
   const router = useRouter();
-  const { authUser } = useAuth();
   const [query, setQuery] = useState<string>('');
   const [result, setResult] = useState<Profile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  function handlePress(user_id: string) {
-    // If user taps on their own profile, redirect to their profile tab
-    if (user_id === authUser?.id) {
-      router.push('/(main)/(tabs)/(_profile)');
-    } else {
-      router.push({
-        pathname: 'user', 
-        params: {id: user_id}
-      });
-    }
+  function handlePress(id: string) {
+    router.push({
+      pathname: 'user', 
+      params: {id}
+    });
   }
   
   // Debounce the query with a 500ms delay

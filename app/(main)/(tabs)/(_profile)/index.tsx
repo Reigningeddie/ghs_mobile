@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react-native';
+import {StyleSheet, Text, TextInput, View, ScrollView, Pressable, Image, Alert} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
 import React, {useEffect} from 'react';
@@ -87,6 +87,12 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.num}>253</Text>
             <Text style={styles.item}>following</Text>
           </View>
+        </View>
+        <View style={styles.btns}>
+          <Pressable style={styles.btnBorders}>
+            <Image source={require('../../../../assets/notification.png')} />
+            <TextInput style={styles.notificationTxt}>Notifications</TextInput>
+          </Pressable>
         </View>
         <Text style={styles.bio}>{profile?.user_name ? '' : 'Create a profile to begin playing the game.' }</Text>
         <View style={styles.vBorder}>
@@ -179,6 +185,21 @@ const styles = StyleSheet.create({
   item: {
     color: '#353535',
     fontSize: 22,
+  },
+  btns: {
+    flexDirection: 'row'
+  },
+  btnBorders: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderRadius: 5,
+    height: 40,
+    width: 125
+  },
+  notificationTxt: {
+    fontSize: 11,
   },
   bio: {
     color: '#353535',

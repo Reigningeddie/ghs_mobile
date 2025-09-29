@@ -11,7 +11,6 @@ import {
   ScrollView,
   Image,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { useAuth } from '../../database/authContext';
 
