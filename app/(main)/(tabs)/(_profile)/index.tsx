@@ -23,9 +23,14 @@ export default function Profile(): React.JSX.Element {
     router.replace('/(auth)')
   };
 
-  function handlePress() {
+  function move2edit() {
     router.push('edit');
   };
+
+  function move2notifications() {
+    router.push('notifications');
+    console.log('touch')
+  }
 
   useEffect(() => {
     // Show alert if profile is not complete
@@ -60,7 +65,7 @@ export default function Profile(): React.JSX.Element {
         </View>
         </View>
         
-        <Pressable onPress={() => handlePress()} >
+        <Pressable onPress={() => move2edit()} >
           <View style={styles.pic} >
             <Text style={styles.create}>{profile?.user_name ? '' : 'create Profile'}</Text>
           </View>
@@ -89,9 +94,9 @@ export default function Profile(): React.JSX.Element {
           </View>
         </View>
         <View style={styles.btns}>
-          <Pressable style={styles.btnBorders}>
+          <Pressable style={styles.btnBorders} onPress={() => move2notifications()} >
             <Image source={require('../../../../assets/notification.png')} />
-            <TextInput style={styles.notificationTxt}>Notifications</TextInput>
+            <Text style={styles.notificationTxt}>Notifications</Text>
           </Pressable>
         </View>
         <Text style={styles.bio}>{profile?.user_name ? '' : 'Create a profile to begin playing the game.' }</Text>

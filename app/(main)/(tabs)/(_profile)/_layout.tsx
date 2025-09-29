@@ -17,6 +17,13 @@ const _layout = () => {
         headerShown: false,
       }}
       />
+      <Stack.Screen 
+      name='notifications'
+      options={{
+        title: 'Back',
+        headerShown: false,
+      }}
+      />
     </Stack>
   )
 }
