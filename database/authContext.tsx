@@ -4,8 +4,8 @@ import {Text, View, StyleSheet} from 'react-native';
 import {
 	signUpService,
 	loginService,
-} from './services'
-import { normalizeAuthError } from './authErrors';
+} from './services/services'
+import { normalizeAuthError } from './errorHandeling/authErrors';
 import {supabase} from '../database/supabase';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
