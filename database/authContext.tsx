@@ -1,6 +1,11 @@
 // src/contexts/AuthContext.tsx
 import {createContext, useContext, useState, useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
+import {
+	signUpService,
+	loginService,
+} from './services'
+import { normalizeAuthError } from './authErrors';
 import {supabase} from '../database/supabase';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,51 +52,37 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
 		};
 	}, []);
 
-
 	const signUp = async (email: string, password: string) => {
-		setIsLoading(true);
-		setErr(null);
-		try {
-			const { data, error } = await supabase.auth.signUp({ email, password });
-			if (error) throw error;
-			console.log(data)
-			return { data, error: null };
-		} catch (error: any) {
-			console.error('Sign up Failed', error);
-			setErr(error.message);
-			return { data: null, error };
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-const login = async (
-    email: string,
-    password: string,
-): Promise<{data: any; error?: any}> => {
-    setErr(null);
     try {
-        const {data, error: supabaseError} =
-            await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-
-        if (supabaseError) {
-            throw new Error(supabaseError.message);
-        }
-
-        if (!data?.session) {
-            throw new Error('No session returned after login');
-        }
-
-        return {data, error: null};
-    } catch (error) {
-        console.error('Login failed:', error);
-        setErr(error instanceof Error ? error.message : 'An unknown error occurred during login');
-        return {data: null, error: error}; // <-- Add this return statement
+      const { data, error } = await signUpService(email, password);
+      if (error) {
+        const message = normalizeAuthError("signup", error.message);
+        setErr(message);
+        return { data: null, error: { message } };
+      }
+      return { data, error: null };
+    } catch (err: any) {
+      const message = err.message ?? "Unexpected error";
+      setErr(message);
+      return { data: null, error: { message } };
     }
-};
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const { data, error } = await loginService(email, password);
+      if (error) {
+        const message = normalizeAuthError("login", error.message);
+        setErr(message);
+        return { data: null, error: { message } };
+      }
+      return { data, error: null };
+    } catch (err: any) {
+      const message = err.message ?? "Unexpected error";
+      setErr(message);
+      return { data: null, error: { message } };
+    }
+  };
 
 	const fetchProfile = async (id: string) => {
 		try {
