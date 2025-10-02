@@ -27,23 +27,41 @@ export const friends = () => {
     setIsLoading(true);
 
     try {
-      const {data, error: err} = await supabase
+      const {data: existingRequest, error: checkErr} = await supabase
         .from('friends')
-        .insert({
-          user_id: authUser?.id,
-          friend_id: user?.user_id,
-          status: 'pending'
-        })
+        .select('*')
+        .eq('user_id', authUser?.id)
+        .eq('friend_id', user?.user_id)
+        .single();
         
-        if (err) throw err;
+        if (checkErr && checkErr.message !== 'No data found') {
+          throw checkErr;
+        }
 
-        Alert.alert('Sucess', 'Friend request sent!')
+        if (existingRequest) {
+          Alert.alert('Info', 'Friend request already sent!');
+          return;
+        } 
+
+        //create new friend request
+        const { data, error: insertErr } = await supabase
+          .from('friends')
+          .insert({
+            user_id: authUser?.id,
+            friend_id: user?.user_id,
+            status: 'pending'
+          });
+
+          if (insertErr) throw insertErr;
+
+          Alert.alert('Success', 'Friend request sent!');
     } catch (error) {
-      Alert.alert('Error', 'Failed to send friend request');
+      Alert.alert('Error', 'Failed to send friend request:');
+      console.error('error sending friend request:', error);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return { add }
 }
