@@ -4,7 +4,7 @@ import {Text, View, StyleSheet} from 'react-native';
 import {
 	signUpService,
 	loginService,
-} from './services/services'
+} from './services/authService'
 import { normalizeAuthError } from './errorHandeling/authErrors';
 import {supabase} from '../database/supabase';
 
