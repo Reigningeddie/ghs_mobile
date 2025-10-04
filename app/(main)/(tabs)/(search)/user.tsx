@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, ScrollView, Pressable, Image, Alert } from 'rea
 import { useRouter } from 'expo-router';
 import { Dimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useTarget } from '../../../../database/targetContext';
-import { useAuth } from '../../../../database/authContext';
-import { useFriends } from '../../../../database/friendsContext'
+import { useTarget } from '../../../../database/context/targetContext';
+import { useAuth } from '../../../../database/context/authContext';
+import { useFriends } from '../../../../database/context/friendsContext'
 import {useEffect, useState}from 'react'
 
 //Get device Width

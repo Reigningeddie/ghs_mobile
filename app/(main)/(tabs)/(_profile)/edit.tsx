@@ -9,7 +9,7 @@ import {
   Image
 } from 'react-native';
 import {useRouter} from 'expo-router';
-import {useAuth} from '../../../../database/authContext';
+import {useAuth} from '../../../../database/context/authContext';
 
 
 

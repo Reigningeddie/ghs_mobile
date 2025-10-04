@@ -2,8 +2,7 @@ import { useState, createContext, useContext, useEffect } from 'react';
 import { useAuth } from './authContext';
 import { Alert } from 'react-native';
 import { useTarget } from './targetContext';
-import { useLocalSearchParams } from 'expo-router';
-import { checkExistingRequest, createRequest } from './services/friendService';
+import { checkExistingRequest, createRequest } from '../services/friendService';
 
 interface friendsTable {
   id: number;
@@ -20,16 +19,13 @@ interface FriendsContextType {
 const FriendsContext = createContext<FriendsContextType | undefined>(undefined);
 
 export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const {id} = useLocalSearchParams<{id: string}>();
   const { authUser } =useAuth()
   const { targetUser, fetchUser } = useTarget();
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    fetchUser(id);
-  }, [id]);
-
   const addFriend = async () => {
+    console.log('target user:', targetUser?.user_id)
+    console.log('auth user:', authUser?.id)
     if (!authUser.id || !targetUser?.user_id) {
       Alert.alert('Error', 'User not found');
       return; 

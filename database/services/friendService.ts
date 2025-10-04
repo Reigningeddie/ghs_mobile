@@ -7,7 +7,7 @@ export const checkExistingRequest = async (userId: string, friendId: string) => 
     .select('*')
     .eq('user_id', userId)
     .eq('friend_id', friendId)
-    .single();
+    .maybeSingle();
 
   // Supabase throws "No data found" if no row exists
   if (error && error.message !== 'No data found') {

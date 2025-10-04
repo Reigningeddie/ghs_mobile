@@ -2,7 +2,7 @@ import {StyleSheet, Text, TextInput, View, ScrollView, Pressable, Image, Alert} 
 import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
 import React, {useEffect} from 'react';
-import {useAuth} from '../../../../database/authContext';
+import {useAuth} from '../../../../database/context/authContext';
 // import type {NavProps} from '../types/types';
 
 //Get device Width

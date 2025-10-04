@@ -12,7 +12,7 @@ import {
   Image,
   KeyboardAvoidingView,
 } from 'react-native';
-import { useAuth } from '../../database/authContext';
+import { useAuth } from '../../database/context/authContext';
 
 export default function Login(): React.JSX.Element {
   const [emailValue, setEmail] = useState('');

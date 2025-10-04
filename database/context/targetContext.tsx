@@ -1,6 +1,6 @@
 // database/targetContext.tsx
 import React, { createContext, useContext, useState } from 'react';
-import { fetchTargetProfile, TargetProfile } from './services/targetService';
+import { fetchTargetProfile, TargetProfile } from '../services/targetService';
 
 interface TargetContextType {
   targetUser: TargetProfile | null;
