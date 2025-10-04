@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { AuthProvider } from "../database/authContext";
+import { AppProvider } from "../database/appProvider";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme, View } from "react-native";
@@ -23,10 +23,10 @@ function LayoutInner() {
 
 export default function Layout() {
   return (
-    <AuthProvider>
+    <AppProvider>
       <SafeAreaProvider>
         <LayoutInner />
       </SafeAreaProvider>
-    </AuthProvider>
+    </AppProvider>
   );
 }

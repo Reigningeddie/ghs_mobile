@@ -2,9 +2,10 @@ import { StyleSheet, Text, View, ScrollView, Pressable, Image, Alert } from 'rea
 import { useRouter } from 'expo-router';
 import { Dimensions } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { userProfile } from '../../../../database/userContext';
+import { useTarget } from '../../../../database/targetContext';
 import { useAuth } from '../../../../database/authContext';
-import { friends} from '../../../../database/friendContext'
+import { useFriends } from '../../../../database/friendsContext'
+import {useEffect, useState}from 'react'
 
 //Get device Width
 const screenWidth = Dimensions.get('window').width;
@@ -15,14 +16,18 @@ const thirds = screenWidth / 3 - .1;
 
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
-  const {id} = useLocalSearchParams(); // user id
-  const {add} = friends();
-  const {user, loading, error} = userProfile(id as string);
+  const {id} = useLocalSearchParams<{id: string}>(); // user id
+  const {addFriend} = useFriends();
+  const {targetUser, fetchUser} = useTarget();
   const { authUser, addPoints, isProfileComplete, isLoading } = useAuth();
+  const [loading, setLoading] = useState();
+  const [error, setError] = useState();
 
-  const addFriend = async () => {
-    add();
-  }
+  useEffect(() => {
+    if (id) {
+      fetchUser(id);
+    }
+  }, [id]);
 
   const handleScore = async () => {
     if (!authUser?.id) return;
@@ -52,11 +57,11 @@ export default function Profile(): React.JSX.Element {
     if (result.error) {
       Alert.alert('Error', result.error.message);
     } else {
-      Alert.alert(`🎉 Grand Hand Slam!`, `You just Grand Hand Slammed ${user?.user_name} and earned 10 points!`);
+      Alert.alert(`🎉 Grand Hand Slam!`, `You just Grand Hand Slammed ${targetUser?.user_name} and earned 10 points!`);
     }
   };
 
-  const displayPoints = user?.points ?? 0;
+  const displayPoints = targetUser?.points ?? 0;
 
 
   if (loading) {
@@ -88,16 +93,16 @@ export default function Profile(): React.JSX.Element {
         </View>
         <Pressable onPress={handleScore}>
           <View style={styles.pic} >
-            <Text style={styles.create}>{user?.first_name ? '' : 'create Profile'}</Text>
+            <Text style={styles.create}>{targetUser?.first_name ? '' : 'create Profile'}</Text>
           </View>
         </Pressable>
         <View style={styles.dominantHand}>
           <View style={styles.left}>
-            {user?.dom_hand === 'left' ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
+            {targetUser?.dom_hand === 'left' ? (<Text style={styles.hand}>👈</Text>) : (<Text style={styles.hidden}>👈</Text>) }
             </View>
-          <Text style={styles.user}>{user?.user_name ?? 'Welcome'}</Text>
+          <Text style={styles.user}>{targetUser?.user_name ?? 'Welcome'}</Text>
           <View style={styles.right}>
-            {user?.dom_hand === 'right' ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
+            {targetUser?.dom_hand === 'right' ? (<Text style={styles.hand}>👉</Text>) : (<Text style={styles.hidden}>👉</Text>)}
           </View>
         </View>
         <View style={styles.flex}>
@@ -114,7 +119,7 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.item}>following</Text>
           </View>
         </View>
-        <Text style={styles.bio}>{user?.last_name ? '' : 'Create a profile to begin playing the game.'}</Text>
+        <Text style={styles.bio}>{targetUser?.last_name ? '' : 'Create a profile to begin playing the game.'}</Text>
         <View style={styles.vBorder}>
           <View style={styles.portrait}>
             <Text style={styles.vids}> 4</Text>
