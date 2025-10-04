@@ -1,7 +1,7 @@
-import {StyleSheet, Text, TextInput, View, ScrollView, Pressable, Image, Alert} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
-import React, {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useAuth} from '../../../../database/context/authContext';
 // import type {NavProps} from '../types/types';
 
@@ -15,6 +15,7 @@ const thirds = screenWidth / 3 - .1;
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {logout, profile, isProfileComplete} = useAuth();
+  const [active, setActive] = useState<boolean>(false)
   
   const displayPoints = profile?.points ?? 0;
 
@@ -22,15 +23,6 @@ export default function Profile(): React.JSX.Element {
     logout();
     router.replace('/(auth)')
   };
-
-  function move2edit() {
-    router.push('edit');
-  };
-
-  function move2notifications() {
-    router.push('notifications');
-    console.log('touch')
-  }
 
   useEffect(() => {
     // Show alert if profile is not complete
@@ -65,7 +57,7 @@ export default function Profile(): React.JSX.Element {
         </View>
         </View>
         
-        <Pressable onPress={() => move2edit()} >
+        <Pressable onPress={() => router.push('/edit')} >
           <View style={styles.pic} >
             <Text style={styles.create}>{profile?.user_name ? '' : 'create Profile'}</Text>
           </View>
@@ -94,7 +86,7 @@ export default function Profile(): React.JSX.Element {
           </View>
         </View>
         <View style={styles.btns}>
-          <Pressable style={styles.btnBorders} onPress={() => move2notifications()} >
+          <Pressable style={styles.btnBorders} onPress={() => router.push('/notifications')} >
             <Image source={require('../../../../assets/notification.png')} />
             <Text style={styles.notificationTxt}>notifications</Text>
           </Pressable>

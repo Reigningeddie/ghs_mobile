@@ -1,7 +1,5 @@
 import { supabase } from "../supabase";
 
-
-
 export const signUpService = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({ email, password });
 
@@ -16,24 +14,6 @@ export const signUpService = async (email: string, password: string) => {
   return { data, error };
 };
 
-
-
 export const loginService = async (email: string, password: string) => {
   return await supabase.auth.signInWithPassword({ email, password });
-};
-
-
-
-export const fetchProfileService = async (id: string) => {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("user_id", id)
-    .single();
-
-  if (error) {
-    return { data: null, error };
-  }
-
-  return { data, error: null };
 };

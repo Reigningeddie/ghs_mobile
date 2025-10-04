@@ -20,12 +20,10 @@ const FriendsContext = createContext<FriendsContextType | undefined>(undefined);
 
 export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { authUser } =useAuth()
-  const { targetUser, fetchUser } = useTarget();
+  const { targetUser } = useTarget();
   const [isLoading, setIsLoading] = useState(false)
 
   const addFriend = async () => {
-    console.log('target user:', targetUser?.user_id)
-    console.log('auth user:', authUser?.id)
     if (!authUser.id || !targetUser?.user_id) {
       Alert.alert('Error', 'User not found');
       return; 
