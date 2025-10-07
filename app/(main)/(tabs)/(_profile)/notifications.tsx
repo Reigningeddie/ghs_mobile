@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 
-export default function notifications(): React.JSX.Element {
+export default function Notifications(): React.JSX.Element {
   const router = useRouter();
 
   return (
@@ -12,7 +12,7 @@ export default function notifications(): React.JSX.Element {
           <Text style={styles.backText}>Back</Text>
         </Pressable>
       </View>
-      <Text>notifications</Text>
+      <Text style={styles.title}>Notifications</Text>
     </View>
   );
 }
@@ -36,4 +36,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18
   },
+  title: {
+    fontSize: 30,
+    textAlign: 'center'
+  }
 });

@@ -1,99 +1,38 @@
-import {View, TextInput, StyleSheet, Text, FlatList, Pressable} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {useRouter} from 'expo-router';
-import {supabase} from '../../../../database/supabase';
-
-// Define the type for the data you're fetching
-interface Profile {
-  id: number;
-  user_id: string;
-  user_name: string;
-}
-
-// Custom hook for debouncing a value
-const useDebounce = <T,>(value: T, delay: number): T => {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    // Clean up the timeout if value changes or component unmounts
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-};
+// app/(main)/(tabs)/(search)/Search.tsx
+import { View, TextInput, StyleSheet, Text, FlatList, Pressable } from 'react-native';
+import React from 'react';
+import { useRouter } from 'expo-router';
+import { useSearch } from '../../../../database/context/searchContext';
 
 const Search = () => {
   const router = useRouter();
-  const [query, setQuery] = useState<string>('');
-  const [result, setResult] = useState<Profile[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { query, setQuery, results, loading, error } = useSearch();
 
   function handlePress(id: string) {
     router.push({
-      pathname: 'user', 
-      params: {id}
+      pathname: 'user',
+      params: { id },
     });
   }
-  
-  // Debounce the query with a 500ms delay
-  const debouncedQuery = useDebounce<string>(query, 500);
-
-  useEffect(() => {
-    if (debouncedQuery.trim()) {
-      setLoading(true);
-      searchDb(debouncedQuery);
-    } else {
-      setResult([]);
-      setLoading(false);
-    }
-  }, [debouncedQuery]);
-
-  const searchDb = async (searchQuery: string) => {
-    try {
-      const {data, error} = await supabase
-        .from('profiles')
-        .select('id, user_id, user_name')
-        .ilike('user_name', `%${searchQuery}%`);
-
-      if (error) throw error;
-
-      // Type-check the data before setting the state
-      const typedData: Profile[] = data as Profile[];
-      setResult(typedData);
-    } catch (error: any) {
-      console.error('Search error:', error.message);
-      setResult([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <View style={styles.body}>
       <TextInput
-        textContentType="none"
-        autoComplete="off"
-        spellCheck={false}
-        importantForAutofill="no"
-        autoCorrect={false}
         style={styles.input}
-        placeholder={'Search by name'}
+        placeholder="Search by name"
         value={query}
         onChangeText={setQuery}
+        autoCorrect={false}
+        spellCheck={false}
       />
 
-      {loading ? (
-        <Text style={styles.results}>Loading...</Text>
-      ) : result.length > 0 ? (
+      {loading && <Text style={styles.results}>Loading...</Text>}
+      {error && !loading && <Text style={styles.results}>{error}</Text>}
+
+      {!loading && results.length > 0 && (
         <FlatList
           style={styles.results}
-          data={result}
+          data={results}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <Pressable onPress={() => handlePress(item.user_id)} style={styles.userDiv}>
@@ -102,8 +41,6 @@ const Search = () => {
             </Pressable>
           )}
         />
-      ) : (
-        <Text style={styles.results}>No results found</Text>
       )}
     </View>
   );
@@ -124,12 +61,10 @@ const styles = StyleSheet.create({
     height: 45,
     margin: 15,
     paddingLeft: 15,
-    paddingTop: 0,
-    paddingBottom: 0,
   },
   results: {
     padding: 20,
-    fontSize: 20
+    fontSize: 20,
   },
   userDiv: {
     height: 50,
@@ -144,10 +79,10 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#1B1B1B',
     borderRadius: 3,
-    marginRight: 10
+    marginRight: 10,
   },
   users: {
     margin: 3,
     fontSize: 23,
-  }
-})
+  },
+});

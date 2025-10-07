@@ -15,7 +15,7 @@ const thirds = screenWidth / 3 - .1;
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const {logout, profile, isProfileComplete} = useAuth();
-  const [active, setActive] = useState<boolean>(false)
+  const [active] = useState<boolean>(false)
   
   const displayPoints = profile?.points ?? 0;
 
@@ -86,9 +86,10 @@ export default function Profile(): React.JSX.Element {
           </View>
         </View>
         <View style={styles.btns}>
-          <Pressable style={styles.btnBorders} onPress={() => router.push('/notifications')} >
-            <Image source={require('../../../../assets/notification.png')} />
-            <Text style={styles.notificationTxt}>notifications</Text>
+          <Pressable style={[styles.btnBorders, active && styles.active]} onPress={() => router.push('/notifications')}>
+            {active ? <Image source={require('../../../../assets/notificationActive.png')} /> :
+            <Image source={require('../../../../assets/notification.png')} />}
+            <Text style={[styles.notificationTxt, active && styles.active]}>notifications</Text>
           </Pressable>
         </View>
         <Text style={styles.bio}>{profile?.user_name ? '' : 'Create a profile to begin playing the game.' }</Text>
@@ -193,10 +194,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     height: 40,
-    width: 125
+    width: 125,
   },
   notificationTxt: {
-    fontSize: 11,
+    fontSize: 12,
+  },
+  active: {
+    backgroundColor: 'black',
+    color: 'white'
   },
   bio: {
     color: '#353535',
