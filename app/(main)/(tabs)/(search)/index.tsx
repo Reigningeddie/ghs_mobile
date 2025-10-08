@@ -3,16 +3,22 @@ import { View, TextInput, StyleSheet, Text, FlatList, Pressable } from 'react-na
 import React from 'react';
 import { useRouter } from 'expo-router';
 import { useSearch } from '../../../../database/context/searchContext';
+import { useAuth } from '../../../../database/context/authContext';
 
 const Search = () => {
   const router = useRouter();
   const { query, setQuery, results, loading, error } = useSearch();
+  const { authUser } = useAuth();
 
-  function handlePress(id: string) {
-    router.push({
-      pathname: 'user',
-      params: { id },
-    });
+  function handlePress(userId: string) {
+    if (authUser?.id === userId) {
+      router.replace('/(main)/(tabs)/(_profile)');
+    } else {
+      router.push({
+        pathname: '/(main)/(tabs)/(search)/user',
+        params: { id: userId },
+      });
+    }
   }
 
   return (

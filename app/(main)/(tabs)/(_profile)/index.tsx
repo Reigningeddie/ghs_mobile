@@ -3,6 +3,7 @@ import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
 import {useEffect, useState} from 'react';
 import {useAuth} from '../../../../database/context/authContext';
+import {useProfile} from '../../../../database/context/profileContext';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -14,7 +15,8 @@ const thirds = screenWidth / 3 - .1;
 
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
-  const {logout, profile, isProfileComplete} = useAuth();
+  const { logout } = useAuth();
+  const { profile, isProfileComplete } = useProfile();
   const [active] = useState<boolean>(false)
   
   const displayPoints = profile?.points ?? 0;

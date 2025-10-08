@@ -1,82 +1,90 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, Image, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Dimensions } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { useTarget } from '../../../../database/context/targetContext';
-import { useAuth } from '../../../../database/context/authContext';
-import { useFriends } from '../../../../database/context/friendsContext'
-import {useEffect, useState}from 'react'
+import React, { useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  Image,
+  Alert,
+} from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { useGame } from "../../../../database/context/gameContext";
+import { useFriends } from "../../../../database/context/friendsContext";
+import { useProfile } from "../../../../database/context/profileContext";
+import { useTarget } from "../../../../database/context/targetContext";
 
-//Get device Width
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+// Get device dimensions
+import { Dimensions } from "react-native";
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 //get specific heights
 const videoBorder = screenHeight / 2.5
 const thirds = screenWidth / 3 - .1;
 
-export default function Profile(): React.JSX.Element {
+export default function UserProfile() {
   const router = useRouter();
-  const {id} = useLocalSearchParams<{id: string}>(); // user id
-  const {addFriend} = useFriends();
-  const {targetUser, fetchUser} = useTarget();
-  const { authUser, addPoints, isProfileComplete, isLoading } = useAuth();
-  const [loading, setLoading] = useState();
-  const [error, setError] = useState();
+  const { id: userId } = useLocalSearchParams<{ id: string }>();
+  const { targetUser, fetchUser } = useTarget(); 
+  const { addPoints } = useGame();
+  const { addFriend } = useFriends();
+  const { profile, isProfileComplete, isLoading, error } = useProfile();
 
+  // Fetch the target user's profile when id changes
   useEffect(() => {
-    if (id) {
-      fetchUser(id);
+    if (userId) {
+      fetchUser(userId)
     }
-  }, [id]);
+  }, [userId]);
 
   const handleScore = async () => {
-    if (!authUser?.id) return;
-    
-    // Check if profile is complete before allowing points
+    if (!profile?.id || !targetUser) return;
+
     if (!isProfileComplete) {
       Alert.alert(
-        '🎯 Complete Your Profile First',
-        'You need to complete your profile before you can earn points!\n\nRequired:\n• Username (6+ characters)\n• First Name\n• Dominant Hand',
+        "🎯 Complete Your Profile First",
+        "You need to complete your profile before earning points!\n\nRequired:\n• Username (6+ characters)\n• First Name\n• Dominant Hand",
         [
+          { text: "Later", style: "cancel" },
           {
-            text: 'Later',
-            style: 'cancel',
-          },
-          {
-            text: 'Complete Profile',
-            onPress: () => router.push('/(main)/(tabs)/(_profile)/edit'),
-            style: 'default',
+            text: "Complete Profile",
+            onPress: () => router.push("/(main)/(tabs)/(_profile)/edit"),
           },
         ]
       );
       return;
     }
-    
-    // Profile is complete, add points
-    const result = await addPoints(authUser.id, 10);
-    if (result.error) {
-      Alert.alert('Error', result.error.message);
+
+    const { data, error } = await addPoints(10);
+    if (error) {
+      Alert.alert("Error", error.message);
     } else {
-      Alert.alert(`🎉 Grand Hand Slam!`, `You just Grand Hand Slammed ${targetUser?.user_name} and earned 10 points!`);
+      Alert.alert(
+        "🎉 Grand Hand Slam!",
+        `You just Grand Hand Slammed ${
+          targetUser.user_name || "a player"
+        } and earned 10 points!`
+      );
     }
   };
 
   const displayPoints = targetUser?.points ?? 0;
 
-
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Loading profile...</Text>
       </View>
     );
-  } if (error) {
+  }
+
+  if (error) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Error loading profile: {error}</Text>
       </View>
     );
-  } 
+  }
 
   return (
     <View style={{flex: 1}}>

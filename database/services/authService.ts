@@ -17,3 +17,14 @@ export const signUpService = async (email: string, password: string) => {
 export const loginService = async (email: string, password: string) => {
   return await supabase.auth.signInWithPassword({ email, password });
 };
+
+export const logoutService = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    return { data: true, error: null };
+  } catch (error: any) {
+    console.error("Logout error:", error.message);
+    return { data: null, error };
+  }
+};

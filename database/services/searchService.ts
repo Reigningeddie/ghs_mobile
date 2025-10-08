@@ -1,17 +1,18 @@
 // database/services/searchService.ts
-import { supabase } from '../supabase';
+import { supabase } from "../supabase";
+import { Profile } from './profileService';
 
-export interface Profile {
-  id: number;
-  user_id: string;
-  user_name: string;
-}
+export const searchProfiles = async (
+  query: string,
+): Promise<Profile[]> => {
+  if (!query.trim()) return [];
 
-export const searchProfiles = async (query: string): Promise<Profile[]> => {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('id, user_id, user_name')
-    .ilike('user_name', `%${query}%`);
+  let queryBuilder = supabase
+    .from("profiles")
+    .select("id, user_id, user_name")
+    .ilike("user_name", `%${query}%`);
+
+  const { data, error } = await queryBuilder;
 
   if (error) throw error;
   return data as Profile[];
