@@ -68,7 +68,7 @@ export const updateProfileService = async (
       // Insert new profile
       result = await supabase
         .from("profiles")
-        .insert({
+        .upsert({
           user_id: userId,
           first_name: updates.first_name ?? null,
           last_name: updates.last_name ?? null,

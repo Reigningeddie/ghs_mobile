@@ -22,7 +22,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdding, setIsAdding] = useState(false);
 
   const addPoints = async (amount: number): Promise<AddPointsResult> => {
-    console.log('hello')
     if (!authUser || !isProfileComplete) {
       console.log("Profile incomplete — cannot add points");
       return {data: null, error: {message: 'complete profile first'}};

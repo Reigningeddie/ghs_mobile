@@ -1,9 +1,10 @@
 import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Dimensions} from 'react-native';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {useAuth} from '../../../../database/context/authContext';
 import {useProfile} from '../../../../database/context/profileContext';
+import { useFocusEffect } from '@react-navigation/native';
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -15,11 +16,17 @@ const thirds = screenWidth / 3 - .1;
 
 export default function Profile(): React.JSX.Element {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, authUser } = useAuth();
   const { profile, isProfileComplete } = useProfile();
   const [active] = useState<boolean>(false)
-  
-  const displayPoints = profile?.points ?? 0;
+  const { fetchProfile } = useProfile();
+
+  // reloads profile on focus
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfile(authUser.id);
+    }, [])
+  );
 
   function handleLogout() {
     logout();
@@ -27,7 +34,6 @@ export default function Profile(): React.JSX.Element {
   };
 
   useEffect(() => {
-    // Show alert if profile is not complete
     if (profile && !isProfileComplete) {
       Alert.alert(
         "Welcome to GRAND HAND SLAM!",
@@ -75,7 +81,7 @@ export default function Profile(): React.JSX.Element {
         </View>
         <View style={styles.flex}>
           <View style={styles.grid}>
-            <Text style={styles.num}>{displayPoints}</Text>
+            <Text style={styles.num}>{profile?.points}</Text>
             <Text style={styles.item}>points</Text>
           </View>
           <View style={styles.grid}>

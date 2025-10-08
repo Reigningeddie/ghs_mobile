@@ -42,29 +42,35 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!profile?.user_id) return;
-    setIsLoading(true);
-    setError(null);
-    const { data, error } = await updateProfileService(profile.user_id, updates);
-    if (error) {
-      setError(error.message);
+    const userId = authUser?.id;
+    if (!userId) return;
+      setIsLoading(true);
+      setError(null);
+    const { data, error } = await updateProfileService(userId, updates);
+      if (error) {
+        setError(error.message);
       Alert.alert("Error", error.message);
     } else if (data) {
-      setProfile(data);
-      setIsProfileComplete(checkProfileComplete(data));
+        setProfile(data);
+        setIsProfileComplete(checkProfileComplete(data));
     }
     setIsLoading(false);
   };
 
   // ✅ Automatically fetch profile when user logs in or changes
   useEffect(() => {
-    if (authUser?.id) {
-      fetchProfile(authUser.id);
-    } else {
-      setProfile(null);
-      setIsProfileComplete(false);
-    }
-  }, [authUser]);
+  if (!authUser?.id) {
+    setProfile(null);
+    setIsProfileComplete(false);
+    return;
+  }
+
+  // only refetch if user actually changed
+  if (profile?.user_id !== authUser.id) {
+    fetchProfile(authUser.id);
+  }
+}, [authUser?.id]);
+
 
   return (
     <ProfileContext.Provider

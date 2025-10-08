@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { useSearch } from '../../../../database/context/searchContext';
 import { useAuth } from '../../../../database/context/authContext';
 
-const Search = () => {
+export default function Search() {
   const router = useRouter();
   const { query, setQuery, results, loading, error } = useSearch();
   const { authUser } = useAuth();
@@ -51,8 +51,6 @@ const Search = () => {
     </View>
   );
 };
-
-export default Search;
 
 const styles = StyleSheet.create({
   body: {

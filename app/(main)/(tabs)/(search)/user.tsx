@@ -68,8 +68,6 @@ export default function UserProfile() {
     }
   };
 
-  const displayPoints = targetUser?.points ?? 0;
-
   if (isLoading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -115,7 +113,7 @@ export default function UserProfile() {
         </View>
         <View style={styles.flex}>
           <View style={styles.grid}>
-            <Text style={styles.num}>{displayPoints}</Text>
+            <Text style={styles.num}>{targetUser?.points}</Text>
             <Text style={styles.item}>points</Text>
           </View>
           <View style={styles.grid}>

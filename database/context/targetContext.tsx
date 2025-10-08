@@ -25,7 +25,6 @@ export const TargetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       const data = await fetchTargetProfile(userId);
       setTargetUser(data);
-      console.log(targetUser)
     } catch (err: any) {
       setError(err.message || 'Failed to fetch user');
       setTargetUser(null);

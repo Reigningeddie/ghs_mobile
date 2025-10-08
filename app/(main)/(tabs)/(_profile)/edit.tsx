@@ -1,6 +1,6 @@
 // app/(main)/(tabs)/(_profile)/edit.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, Alert, Image } from 'react-native';
 import { useAuth } from '../../../../database/context/authContext';
 import { updateProfileService } from '../../../../database/services/profileService';
 import { useProfile } from '../../../../database/context/profileContext';
@@ -31,13 +31,35 @@ export default function EditProfile() {
   const handleUpdateProfile = async () => {
     if (!authUser?.id) return;
 
+    // Trim and normalize the username
+  const normalizedUserName = userName.trim().toLowerCase();
+
+  // Validation: username must be at least 6 characters
+  if (normalizedUserName.length < 6) {
+    Alert.alert('Invalid Username', 'Username must be at least 6 characters long.');
+    return;
+  }
+
+    // if user didn't change anything, skip the update
+    const hasChanges =
+    firstName !== profile?.first_name ||
+    lastName !== profile?.last_name ||
+    normalizedUserName !== profile?.user_name ||
+    mobileNumber !== profile?.mobile_number ||
+    domHand !== profile?.dom_hand;
+
+  if (!hasChanges) {
+    Alert.alert('No changes detected', 'Your profile is already up to date.');
+    return;
+  }
+
     setIsSubmitting(true);
 
     try {
       const { data, error } = await updateProfileService(authUser.id, {
         first_name: firstName,
         last_name: lastName,
-        user_name: userName,
+        user_name: normalizedUserName,
         mobile_number: mobileNumber,
         dom_hand: domHand,
       });
@@ -46,7 +68,7 @@ export default function EditProfile() {
         Alert.alert('Error', error.message || 'Failed to update profile');
       } else {
         Alert.alert('Success', 'Profile updated successfully!');
-        fetch(authUser.id); // refresh context
+        await fetchProfile(authUser.id); // refresh context
         router.back();
       }
     } catch (err: any) {
@@ -58,8 +80,15 @@ export default function EditProfile() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>First Name</Text>
+    <View style={styles.body}>
+      <View style={styles.banner}>
+        <Pressable onPress={() => router.back()} style={styles.back}>
+          <Image source={require('../../../../assets/back.png')} />
+          <Text style={styles.bannertxt}>Back</Text>
+        </Pressable>
+      </View>
+      <View style={styles.container}>
+        <Text style={styles.label}>First Name</Text>
       <TextInput
         style={styles.input}
         value={firstName}
@@ -111,13 +140,32 @@ export default function EditProfile() {
       <Pressable style={styles.submitButton} onPress={handleUpdateProfile} disabled={isSubmitting}>
         <Text style={styles.submitText}>{isSubmitting ? 'Saving...' : 'Save Profile'}</Text>
       </Pressable>
-    </ScrollView>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    width: '100%',
+  },
+  banner: {
+    backgroundColor: '#284B63',
+    height: 55,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  back: {
+    flexDirection: 'row',
+  },
+  bannertxt: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#D9D9D9'
+  },
   container: {
-    padding: 20,
+    padding: 20
   },
   label: {
     fontSize: 18,
