@@ -16,11 +16,10 @@ export default function Notifications(): React.JSX.Element {
       <ScrollView contentContainerStyle={styles.borderContent}>
         <View style={styles.section}>
           <Text style={styles.titleTxt}>Friend Requests</Text>
-          
-          <View style={styles.requests}>
+          <View style={styles.card}>
               <View style={styles.img} />
               <View style={styles.info}>
-                <Text style={styles.user}>Credibowl</Text>
+                <Text style={styles.user}>credibowl</Text>
                 <Text style={styles.txt}>Sent you a friend request</Text>
                 <Text style={styles.time}>10m</Text>
               </View>
@@ -28,13 +27,19 @@ export default function Notifications(): React.JSX.Element {
               <Text style={styles.btnTxt}>Accept</Text>
             </Pressable>
           </View>
-
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.titleTxt}>Grand Hand Slams</Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.titleTxt}>Likes ♥️</Text>
+          <View style={styles.card}>
+            <View style={styles.img}/>
+            <View style={styles.info}>
+              <Text style={styles.user}>beerFlips</Text>
+              <Text style={styles.txt}>Grand Hand Slammed</Text>
+              <Text style={styles.user}>reigningeddie</Text>
+              <Text style={styles.time}>5m</Text>
+            </View>
+            <View style={styles.post} />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
-  requests: {
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -115,5 +120,13 @@ const styles = StyleSheet.create({
   },
   btnTxt: {
     color: 'white',
+  },
+  post: {
+    backgroundColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 1,
+    borderColor: 'grey',
+    width: '19%',
+    height: 70
   }
 });
