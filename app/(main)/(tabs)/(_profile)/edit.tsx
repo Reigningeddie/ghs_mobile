@@ -1,6 +1,6 @@
 // app/(main)/(tabs)/(_profile)/edit.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, Alert, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, Alert, Image, ScrollView } from 'react-native';
 import { useAuth } from '../../../../database/context/authContext';
 import { updateProfileService } from '../../../../database/services/profileService';
 import { useProfile } from '../../../../database/context/profileContext';
@@ -81,12 +81,16 @@ export default function EditProfile() {
 
   return (
     <View style={styles.body}>
-      <View style={styles.banner}>
+      <ScrollView>
+        <View style={styles.banner}>
         <Pressable onPress={() => router.back()} style={styles.back}>
           <Image source={require('../../../../assets/back.png')} />
           <Text style={styles.bannertxt}>Back</Text>
         </Pressable>
       </View>
+      <Pressable style={styles.picBorder}>
+        <View style={styles.pic}/>
+      </Pressable>
       <View style={styles.container}>
         <Text style={styles.label}>First Name</Text>
       <TextInput
@@ -103,6 +107,7 @@ export default function EditProfile() {
         onChangeText={setLastName}
         placeholder="Last Name"
       />
+      
 
       <Text style={styles.label}>Username</Text>
       <TextInput
@@ -127,7 +132,7 @@ export default function EditProfile() {
           style={[styles.handButton, domHand === 'left' && styles.selectedHand]}
           onPress={() => setDomHand('left')}
         >
-          <Text>Left 👈</Text>
+          <Text>👈 Left</Text>
         </Pressable>
         <Pressable
           style={[styles.handButton, domHand === 'right' && styles.selectedHand]}
@@ -141,6 +146,7 @@ export default function EditProfile() {
         <Text style={styles.submitText}>{isSubmitting ? 'Saving...' : 'Save Profile'}</Text>
       </Pressable>
       </View>
+      </ScrollView>
     </View>
   );
 }
@@ -163,6 +169,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#D9D9D9'
+  },
+  picBorder: {
+    alignItems: 'center',
+    paddingTop: 10
+  },
+  pic: {
+    backgroundColor: '#3C6E71',
+    height: 150,
+    width: 150,
+    borderRadius: 80,
+    borderWidth: 3,
+    borderColor: '#353535'
   },
   container: {
     padding: 20

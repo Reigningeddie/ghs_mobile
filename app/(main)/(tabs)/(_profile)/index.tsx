@@ -55,7 +55,7 @@ export default function Profile(): React.JSX.Element {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <ScrollView contentContainerStyle={styles.containerContent}>
         <View style={styles.banner} >
           <View style={styles.txtContainer}>
           <Text style={styles.txt}>Grand Hand Slam</Text>
@@ -115,7 +115,7 @@ export default function Profile(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  contentContainer: {
+  containerContent: {
     alignItems: 'center',
     width: screenWidth,
     flexGrow: 1,
@@ -147,8 +147,6 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     borderColor: '#353535',
     borderWidth: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   create: {
     color: 'black',
