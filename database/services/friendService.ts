@@ -17,6 +17,25 @@ export const checkExistingRequest = async (userId: string, friendId: string) => 
   return data;
 };
 
+export const getFriendRequests = async (user_id: string) => {
+  const { data , error } = await supabase
+    .from('friends')
+    .select(`
+      id,
+      user_id,
+      friend_id,
+      status,
+      created_at,
+      profiles!friends_user_id_fkey (user_name),
+      friend_profile:profiles!friends_friend_id_fkey (username)
+      `)
+      .or(`friend_id.eq.${user_id}, user_id.eq.${user_id}`)
+      .order('create_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+};
+
 export const createRequest = async (userId: string, friendId: string) => {
   const { data, error } = await supabase
     .from('friends')

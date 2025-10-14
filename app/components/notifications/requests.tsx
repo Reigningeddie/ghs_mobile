@@ -1,81 +1,63 @@
-import { StyleSheet, Text, View, Pressable, FlatList, ActivityIndicator } from 'react-native'
-import React, { useEffect } from 'react'
-import { useFriends } from '../../../database/context/friendsContext'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import React from 'react'
 
-export default function Requests() {
-  const { pendingRequests, requestsLoading, refreshRequests } = useFriends()
-
-  /* auto-load once */
-  useEffect(() => { refreshRequests() }, [])
-
-  const renderItem = ({ item }: { item: any }) => (
+const requests = () => {
+  return (
     <View style={styles.card}>
       <View style={styles.img} />
       <View style={styles.info}>
-        <Text style={styles.user}>{item.profiles.user_name}</Text>
-        <Text style={styles.txt}>Sent you a friend request</Text>
-        <Text style={styles.time}>{new Date(item.created_at).toLocaleDateString()}</Text>
+        <Text style={styles.user}>credibowl</Text>
+        <Text style={styles.txt}>Sent you a friend request </Text>
+        <Text style={styles.time}>10m</Text>
       </View>
       <Pressable style={styles.btn}>
         <Text style={styles.btnTxt}>Accept</Text>
-      </Pressable>
+      </Pressable> 
     </View>
   )
-
-  if (requestsLoading && !pendingRequests.length) {
-    return <ActivityIndicator size="small" style={{ marginTop: 20 }} />
-  }
-
-  if (!pendingRequests.length) {
-    return <Text style={{ color: '#818589' }}>No current friend requests</Text>
-  }
-
-  return (
-    <FlatList
-      data={pendingRequests}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={renderItem}
-      contentContainerStyle={{ paddingBottom: 16 }}
-    />
-  )
 }
+
+export default requests
 
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
   },
   img: {
     backgroundColor: '#284B63',
     height: 65,
     width: 65,
-    borderRadius: 50,
+    borderRadius: 50
   },
   info: {
-    flex: 1,
-    marginLeft: 12,
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '65%',
   },
   user: {
     fontSize: 17,
     fontWeight: 'bold',
+    marginRight: 4,
   },
   txt: {
-    fontSize: 14,
-    color: '#555',
+    marginRight: 4,
   },
   time: {
-    fontSize: 12,
     color: '#636363',
   },
   btn: {
     backgroundColor: '#2EA1DD',
+    borderWidth: 1,
     borderRadius: 3,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    borderColor: '#2EA1DD',
+    width: '19%',
+    height: 26,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   btnTxt: {
     color: 'white',
-    fontWeight: '600',
   },
 })

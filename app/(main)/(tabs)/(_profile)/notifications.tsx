@@ -9,6 +9,7 @@ export default function Notifications(): React.JSX.Element {
   const [requests, setRequests] = useState<boolean>(false);
   const [likes, setLikes] = useState<boolean>(false);
 
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.header}>

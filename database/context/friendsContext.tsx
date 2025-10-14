@@ -2,17 +2,20 @@ import { useState, createContext, useContext, useEffect } from 'react';
 import { useAuth } from './authContext';
 import { Alert } from 'react-native';
 import { useTarget } from './targetContext';
-import { checkExistingRequest, createRequest } from '../services/friendService';
+import { checkExistingRequest, createRequest, getFriendRequests } from '../services/friendService';
 
-interface friendsTable {
+type friendsTable = {
   id: number;
   user_id: string;
   friend_id: string;
   status: 'pending' | 'accepted' | 'blocked';
+  created_at: string;
 };
 
 interface FriendsContextType {
   addFriend: () => Promise<void>;
+  fetchRequests: () => Promise<void>;
+  friendRequests: friendsTable[];
   isLoading: boolean;
 }
 
@@ -22,6 +25,7 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { authUser } =useAuth()
   const { targetUser } = useTarget();
   const [isLoading, setIsLoading] = useState(false)
+  const [friendRequests, setRequests] = useState<friendsTable[]>([])
 
   const addFriend = async () => {
     if (!authUser.id || !targetUser?.user_id) {
@@ -41,6 +45,7 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
       await createRequest(authUser.id, targetUser.user_id);
       Alert.alert('Success', 'Friend request sent!');
+      fetchRequests();
     } catch (err) {
       Alert.alert('Error', 'Failed to send friend request');
       console.error('Error sending friend request:', err);
@@ -49,8 +54,21 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const fetchRequests = async () => {
+    if (!authUser?.id) return;
+      setIsLoading(true);
+    try {
+      const requests = await getFriendRequests(authUser.id);
+      setRequests(requests);
+    } catch (err) {
+      console.error('Error fetching friend requests:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <FriendsContext.Provider value={{ addFriend, isLoading }}>
+    <FriendsContext.Provider value={{ addFriend, fetchRequests, friendRequests, isLoading }}>
       {children}
     </FriendsContext.Provider>
   );
