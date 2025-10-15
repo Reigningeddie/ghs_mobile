@@ -10,6 +10,16 @@ type friendsTable = {
   friend_id: string;
   status: 'pending' | 'accepted' | 'blocked';
   created_at: string;
+
+  profiles?: {
+    user_name: string;
+    avatar_url: string | null;
+  };
+
+  friend_profile?: {
+    user_name: string;
+    avatar_url: string | null;
+  };
 };
 
 interface FriendsContextType {
@@ -55,17 +65,25 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const fetchRequests = async () => {
-    if (!authUser?.id) return;
-      setIsLoading(true);
-    try {
-      const requests = await getFriendRequests(authUser.id);
-      setRequests(requests);
-    } catch (err) {
-      console.error('Error fetching friend requests:', err);
-    } finally {
-      setIsLoading(false);
-    }
+  if (!authUser?.id) return;
+  setIsLoading(true);
+  try {
+    const requests = await getFriendRequests(authUser.id);
+
+    // Flatten Supabase join arrays
+    const cleaned = requests.map(item => ({
+      ...item,
+      profiles: Array.isArray(item.profiles) ? item.profiles[0] : item.profiles,
+      friend_profile: Array.isArray(item.friend_profile) ? item.friend_profile[0] : item.friend_profile,
+    }));
+
+    setRequests(cleaned);
+  } catch (err) {
+    console.error('Error fetching friend requests:', err);
+  } finally {
+    setIsLoading(false);
   }
+}
 
   return (
     <FriendsContext.Provider value={{ addFriend, fetchRequests, friendRequests, isLoading }}>

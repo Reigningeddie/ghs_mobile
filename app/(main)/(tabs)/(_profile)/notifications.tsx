@@ -1,14 +1,10 @@
 import { StyleSheet, Text, View, Pressable, Image, ScrollView } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
 import Requests from '../../../components/notifications/requests'
 import Likes from '../../../components/notifications/likes'
 
 export default function Notifications(): React.JSX.Element {
   const router = useRouter();
-  const [requests, setRequests] = useState<boolean>(false);
-  const [likes, setLikes] = useState<boolean>(false);
-
 
   return (
     <View style={{flex: 1}}>
@@ -19,21 +15,17 @@ export default function Notifications(): React.JSX.Element {
         </Pressable>
         <Text style={styles.title}>Notifications</Text>
       </View>
-      <ScrollView contentContainerStyle={styles.borderContent}>
         <View style={styles.section}>
           <Text style={styles.titleTxt}>Friend Requests</Text>
-          {requests ? <Requests /> : <Text style={styles.inactive}>No Current Friend Requests</Text> } 
+          <Requests /> 
         </View>
         <View style={styles.section}>
           <Text style={styles.titleTxt}>Likes ♥️</Text>
-          {likes ? <Likes /> : <Text style={styles.inactive}>No Current Likes</Text> }
+          <Likes />
         </View>
-      </ScrollView>
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   header: {

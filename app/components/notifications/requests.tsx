@@ -1,25 +1,59 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Pressable, FlatList, Image, ActivityIndicator } from 'react-native'
+import { useFriends } from '../../../database/context/friendsContext'
+import { useEffect } from 'react'
 
-const requests = () => {
+
+export default function Requests() {
+  const { friendRequests, fetchRequests, isLoading} = useFriends()
+
+  useEffect(() => {
+    fetchRequests()
+  }, [])
+
+  if (isLoading) return <ActivityIndicator size="large" style={{ marginTop: 20 }} />
+
+  const pending = friendRequests.filter((req) => req.status === 'pending')
+
+  if (pending.length === 0)
+    return <Text style={styles.inactive}>No Current Friend Requests</Text>
+
   return (
-    <View style={styles.card}>
-      <View style={styles.img} />
-      <View style={styles.info}>
-        <Text style={styles.user}>credibowl</Text>
-        <Text style={styles.txt}>Sent you a friend request </Text>
-        <Text style={styles.time}>10m</Text>
-      </View>
-      <Pressable style={styles.btn}>
-        <Text style={styles.btnTxt}>Accept</Text>
-      </Pressable> 
-    </View>
-  )
+    <FlatList
+      data={pending}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.card}>
+          {item.friend_profile?. avatar_url ? (
+            <Image
+              source={{ uri: item.friend_profile.avatar_url }}
+              style={{ width: 50, height: 50, borderRadius: 25 }}
+            />): (
+              <View style={styles.img} />
+            )}
+          <View style={styles.info}>
+            <Text style={styles.user}>
+            {item.profiles?.user_name}
+          </Text>
+          <Text style={styles.txt}>
+            sent you a friend request
+          </Text>
+          <Text style={styles.time}>10m</Text>
+          
+          </View>
+          <Pressable style={styles.btn}>
+            <Text style={styles.btnTxt}>Accept</Text>
+          </Pressable>
+        </View>
+      )}
+    />
+  );
 }
 
-export default requests
-
 const styles = StyleSheet.create({
+  inactive: {
+    color: "#818589",
+    marginTop: 5
+  },
   card: {
     flexDirection: 'row',
     alignItems: 'center',

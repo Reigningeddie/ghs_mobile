@@ -26,11 +26,11 @@ export const getFriendRequests = async (user_id: string) => {
       friend_id,
       status,
       created_at,
-      profiles!friends_user_id_fkey (user_name),
-      friend_profile:profiles!friends_friend_id_fkey (username)
+      profiles!friends_user_id_fkey (user_name: user_name, avatar_url),
+      friend_profile:profiles!friends_friend_id_fkey (user_name: user_name, avatar_url)
       `)
       .or(`friend_id.eq.${user_id}, user_id.eq.${user_id}`)
-      .order('create_at', { ascending: false });
+      .order('created_at', { ascending: false });
       
       if (error) throw error;
       return data;

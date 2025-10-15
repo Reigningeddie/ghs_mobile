@@ -10,6 +10,7 @@ export interface Profile {
   dom_hand?: string;
   points?: number;
   mobile_number?: string;
+  avatar_url?: string;
 }
 
 
