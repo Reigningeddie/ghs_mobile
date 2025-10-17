@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import { useTarget } from './targetContext';
 import { checkExistingRequest, createRequest, getFriendRequests } from '../services/friendService';
 
-type friendsTable = {
+export type friendsTable = {
   id: number;
   user_id: string;
   friend_id: string;
@@ -25,7 +25,10 @@ type friendsTable = {
 interface FriendsContextType {
   addFriend: () => Promise<void>;
   fetchRequests: () => Promise<void>;
-  friendRequests: friendsTable[];
+  friendRequests: {
+    incoming: friendsTable[];
+    outgoing: friendsTable[];
+  }
   isLoading: boolean;
 }
 
@@ -35,7 +38,13 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { authUser } =useAuth()
   const { targetUser } = useTarget();
   const [isLoading, setIsLoading] = useState(false)
-  const [friendRequests, setRequests] = useState<friendsTable[]>([])
+  const [requests, setRequests] = useState<{
+  incoming: friendsTable[];
+  outgoing: friendsTable[];
+}>({
+  incoming: [],
+  outgoing: [],
+});
 
   const addFriend = async () => {
     if (!authUser.id || !targetUser?.user_id) {
@@ -66,6 +75,7 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const fetchRequests = async () => {
   if (!authUser?.id) return;
+
   setIsLoading(true);
   try {
     const requests = await getFriendRequests(authUser.id);
@@ -74,19 +84,28 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const cleaned = requests.map(item => ({
       ...item,
       profiles: Array.isArray(item.profiles) ? item.profiles[0] : item.profiles,
-      friend_profile: Array.isArray(item.friend_profile) ? item.friend_profile[0] : item.friend_profile,
+      friend_profile: Array.isArray(item.friend_profile)
+        ? item.friend_profile[0]
+        : item.friend_profile,
     }));
 
-    setRequests(cleaned);
+    // Separate incoming vs outgoing requests
+    const incoming = cleaned.filter(req => req.friend_id === authUser.id && req.status === 'pending');
+    const outgoing = cleaned.filter(req => req.user_id === authUser.id && req.status === 'pending');
+
+    setRequests({
+      incoming,
+      outgoing,
+    });
   } catch (err) {
     console.error('Error fetching friend requests:', err);
   } finally {
     setIsLoading(false);
   }
-}
+};
 
   return (
-    <FriendsContext.Provider value={{ addFriend, fetchRequests, friendRequests, isLoading }}>
+    <FriendsContext.Provider value={{ addFriend, fetchRequests, friendRequests: requests, isLoading }}>
       {children}
     </FriendsContext.Provider>
   );
