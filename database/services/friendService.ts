@@ -51,3 +51,19 @@ export const createRequest = async (userId: string, friendId: string) => {
 
   return data;
 };
+
+export const updateRequestStatus = async (id: number, status: string) => {
+  const { error } = await supabase
+    .from('friends')
+    .update({ status })
+    .eq('id', id);
+  if (error) throw error;
+};
+
+export const deleteRequestStatus = async (id: number) => {
+  const { error } = await supabase
+    .from('friends')
+    .delete()
+    .eq('id', id);
+  if (error) throw error;
+};

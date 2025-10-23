@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'
-import { useFriends, friendsTable } from '../../../database/context/friendsContext'
+import { useFriends, friendsTable, } from '../../../database/context/friendsContext'
 import { useEffect } from 'react'
 import { Swipeable } from 'react-native-gesture-handler'
 import { Pressable } from 'react-native'
 
 export default function Requests() {
-  const { friendRequests, fetchRequests, isLoading } = useFriends()
+  const { friendRequests, fetchRequests, acceptRequest, deleteRequest, isLoading } = useFriends()
 
   useEffect(() => {
     fetchRequests()
@@ -24,8 +24,8 @@ export default function Requests() {
   //   </Pressable>
   // )
 
-  const renderRightActions = (req: friendsTable) => (
-    <Pressable style={[styles.actionBtn, { backgroundColor: 'red' }]}>
+  const renderRightActions = (item: friendsTable) => (
+    <Pressable style={[styles.actionBtn, { backgroundColor: 'red' }]} onPress={() => deleteRequest(item.id)}>
       <Text style={styles.actionText}>Delete</Text>
     </Pressable>
   )
@@ -51,8 +51,9 @@ export default function Requests() {
                 <View style={styles.info}>
                   <Text style={styles.user}>{item.profiles?.user_name}</Text>
                   <Text style={styles.txt}>sent you a friend request</Text>
+                  <Text style={styles.time}>10m</Text>
                 </View>
-                <Pressable style={styles.btn}>
+                <Pressable style={styles.btn} onPress={() => acceptRequest(item.id)}>
                   <Text style={styles.btnTxt}>Accept</Text>
                 </Pressable>
               </View>
@@ -63,7 +64,6 @@ export default function Requests() {
 
       {outgoing.length > 0 && (
         <>
-          <Text style={styles.sectionTitle}>Sent Requests</Text>
           {outgoing.map((item) => (
             <View key={item.id} style={styles.card}>
               {item.friend_profile?.avatar_url ? (
@@ -77,6 +77,7 @@ export default function Requests() {
               <View style={styles.info}>
                 <Text style={styles.user}>{item.profiles?.user_name}</Text>
                 <Text style={styles.txt}>Friend request sent</Text>
+                <Text style={styles.time}>1h</Text>
               </View>
             </View>
           ))}
@@ -140,6 +141,9 @@ const styles = StyleSheet.create({
   actionText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  time: {
+    color: '#636363'
   },
   btn: {
     backgroundColor: '#2EA1DD',

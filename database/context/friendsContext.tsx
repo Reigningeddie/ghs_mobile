@@ -1,8 +1,13 @@
-import { useState, createContext, useContext, useEffect } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { useAuth } from './authContext';
 import { Alert } from 'react-native';
 import { useTarget } from './targetContext';
-import { checkExistingRequest, createRequest, getFriendRequests } from '../services/friendService';
+import { checkExistingRequest, 
+  createRequest, 
+  getFriendRequests, 
+  updateRequestStatus, 
+  deleteRequestStatus
+} from '../services/friendService';
 
 export type friendsTable = {
   id: number;
@@ -24,11 +29,13 @@ export type friendsTable = {
 
 interface FriendsContextType {
   addFriend: () => Promise<void>;
+  acceptRequest: (id: number) => Promise<void>;
+  deleteRequest: (id: number) => Promise<void>;
   fetchRequests: () => Promise<void>;
   friendRequests: {
     incoming: friendsTable[];
     outgoing: friendsTable[];
-  }
+  };
   isLoading: boolean;
 }
 
@@ -104,8 +111,30 @@ export const FriendsProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }
 };
 
+const acceptRequest = async (id: number) => {
+    try {
+      await updateRequestStatus(id, 'accepted');
+      Alert.alert('Success', 'Friend request accepted!');
+      fetchRequests();
+    } catch (err) {
+      Alert.alert('Error', 'Failed to accept friend request');
+      console.error(err);
+    }
+  };
+
+  const deleteRequest = async (id: number) => {
+    try {
+      await deleteRequestStatus(id);
+      Alert.alert('Deleted', 'Friend request removed.');
+      fetchRequests();
+    } catch (err) {
+      Alert.alert('Error', 'Failed to delete friend request');
+      console.error(err);
+    }
+  };
+
   return (
-    <FriendsContext.Provider value={{ addFriend, fetchRequests, friendRequests: requests, isLoading }}>
+    <FriendsContext.Provider value={{ addFriend, acceptRequest, deleteRequest, fetchRequests, friendRequests: requests, isLoading }}>
       {children}
     </FriendsContext.Provider>
   );
