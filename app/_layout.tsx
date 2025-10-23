@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { AppProvider } from "../database/appProvider";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme, View } from "react-native";
 
@@ -24,9 +25,11 @@ function LayoutInner() {
 export default function Layout() {
   return (
     <AppProvider>
-      <SafeAreaProvider>
+      <GestureHandlerRootView>
+        <SafeAreaProvider>
         <LayoutInner />
       </SafeAreaProvider>
+      </GestureHandlerRootView>
     </AppProvider>
   );
 }

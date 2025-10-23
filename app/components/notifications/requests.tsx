@@ -1,29 +1,44 @@
-import { StyleSheet, Text, View, Pressable, FlatList, Image, ActivityIndicator } from 'react-native';
-import { useFriends, friendsTable } from '../../../database/context/friendsContext';
-import { useEffect } from 'react';
+import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'
+import { useFriends, friendsTable } from '../../../database/context/friendsContext'
+import { useEffect } from 'react'
+import { Swipeable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
 
 export default function Requests() {
-  const { friendRequests, fetchRequests, isLoading } = useFriends();
-  const{ incoming, outgoing } = friendRequests
+  const { friendRequests, fetchRequests, isLoading } = useFriends()
 
   useEffect(() => {
-    fetchRequests();
-  }, []);
+    fetchRequests()
+  }, [])
 
-  if (isLoading) return <ActivityIndicator size="large" style={{ marginTop: 20 }} />;
+  if (isLoading) return <ActivityIndicator size="large" style={{ marginTop: 20 }} />
+
+  const { incoming, outgoing } = friendRequests
 
   if (incoming.length === 0 && outgoing.length === 0)
-    return <Text style={styles.inactive}>No Current Friend Requests</Text>;
+    return <Text style={styles.inactive}>No Current Friend Requests</Text>
+
+  // const renderRightActions = (req: friendsTable) => (
+  //   <Pressable style={[styles.actionBtn, { backgroundColor: 'green' }]}>
+  //     <Text style={styles.actionText}>Accept</Text>
+  //   </Pressable>
+  // )
+
+  const renderRightActions = (req: friendsTable) => (
+    <Pressable style={[styles.actionBtn, { backgroundColor: 'red' }]}>
+      <Text style={styles.actionText}>Delete</Text>
+    </Pressable>
+  )
 
   return (
-    <View style={{ paddingTop: 10 }}>
-      {/* Incoming Requests */}
+    <View style={{ paddingTop: 2 }}>
       {incoming.length > 0 && (
         <>
-          <FlatList
-            data={incoming}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
+          {incoming.map((item) => (
+            <Swipeable
+              key={item.id}
+              renderRightActions={() => renderRightActions(item)}
+            >
               <View style={styles.card}>
                 {item.friend_profile?.avatar_url ? (
                   <Image
@@ -31,66 +46,67 @@ export default function Requests() {
                     style={styles.avatar}
                   />
                 ) : (
-                  <View style={styles.img} />
+                  <View style={styles.imgPlaceholder} />
                 )}
                 <View style={styles.info}>
                   <Text style={styles.user}>{item.profiles?.user_name}</Text>
-                  <Text style={styles.txt}>sent you a friend request to</Text>
+                  <Text style={styles.txt}>sent you a friend request</Text>
                 </View>
                 <Pressable style={styles.btn}>
                   <Text style={styles.btnTxt}>Accept</Text>
                 </Pressable>
               </View>
-            )}
-          />
+            </Swipeable>
+          ))}
         </>
       )}
 
-      {/* Outgoing Requests */}
       {outgoing.length > 0 && (
         <>
-          <FlatList
-            data={outgoing}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.card}>
-                {item.friend_profile?.avatar_url ? (
-                  <Image
-                    source={{ uri: item.friend_profile.avatar_url }}
-                    style={styles.avatar}
-                  />
-                ) : (
-                  <View style={styles.img} />
-                )}
-                <View style={styles.info}>
-                  <Text style={styles.txt}>Friend request sent to</Text>
-                  <Text style={styles.user}>{item.friend_profile?.user_name}</Text>
-                </View>
+          <Text style={styles.sectionTitle}>Sent Requests</Text>
+          {outgoing.map((item) => (
+            <View key={item.id} style={styles.card}>
+              {item.friend_profile?.avatar_url ? (
+                <Image
+                  source={{ uri: item.friend_profile.avatar_url }}
+                  style={styles.avatar}
+                />
+              ) : (
+                <View style={styles.imgPlaceholder} />
+              )}
+              <View style={styles.info}>
+                <Text style={styles.user}>{item.profiles?.user_name}</Text>
+                <Text style={styles.txt}>Friend request sent</Text>
               </View>
-            )}
-          />
+            </View>
+          ))}
         </>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   inactive: {
     color: '#818589',
     marginTop: 5,
+    textAlign: 'center',
   },
   sectionTitle: {
-    fontWeight: 'bold',
     fontSize: 16,
+    fontWeight: 'bold',
     marginVertical: 8,
+    marginLeft: 5,
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    marginVertical: 2,
   },
-  img: {
+  imgPlaceholder: {
     backgroundColor: '#284B63',
     height: 50,
     width: 50,
@@ -102,19 +118,28 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   info: {
-    alignItems: 'center',
+    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '65%',
-    marginLeft: 10,
+    alignItems: 'center',
+    marginLeft: 8,
   },
   user: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: 'bold',
     marginRight: 4,
   },
   txt: {
     marginRight: 4,
+  },
+  actionBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+  },
+  actionText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   btn: {
     backgroundColor: '#2EA1DD',
@@ -129,4 +154,4 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: 'white',
   },
-});
+})
