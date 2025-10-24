@@ -1,5 +1,4 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
 import {Dimensions} from 'react-native';
 import {LeaderboardPlayer} from '../../../database/services/leaderboardService'
 
@@ -17,7 +16,7 @@ interface TopThreeProps {
 const TopThree = ({ data = [] }: TopThreeProps) => {
   // Ensure we always have 3 slots for the top 3
   const slots = [data[1], data[0], data[2]]; // 1st in center, 2nd left, 3rd right
-
+  console.log('top ---->', data)
   return (
     <View style={styles.body}>
       <View style={styles.top3}>
@@ -37,7 +36,7 @@ const TopThree = ({ data = [] }: TopThreeProps) => {
             <Text style={styles.name}>{slots[1]?.user_name ?? '—'}</Text>
             <Text style={styles.points}>{slots[1]?.points ?? '—'} pts</Text>
           </View>
-          
+
           {/* Right (3rd place) */}
           <View style={[styles.sides, styles.right]}>
             <View style={styles.pic} />
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
   sides: {
     borderWidth: 1,
     width: thirds,
-    height: 140,
     alignItems: 'center',
     backgroundColor: '#D9D9D9',
   },
@@ -104,6 +102,7 @@ const styles = StyleSheet.create({
   left: {
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12,
+    height: 140
   },
   center: {
     color: 'white',
@@ -118,5 +117,6 @@ const styles = StyleSheet.create({
   right: {
     borderTopRightRadius: 12,
     borderBottomRightRadius: 12,
+    height: 105
   },
 });

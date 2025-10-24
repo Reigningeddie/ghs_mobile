@@ -1,7 +1,6 @@
 import {ScrollView, ActivityIndicator} from 'react-native';
 import {useState, useEffect} from 'react';
 import { fetchLeaderboard, LeaderboardPlayer } from '../../../../database/services/leaderboardService'
-import * as leaderboardService from '../../../../database/services/leaderboardService';
 //components
 import TopThree from '../../../components/leaderboard/topThree';
 import UnderThree from '../../../components/leaderboard/underThree';
@@ -15,15 +14,12 @@ const LeaderBoard = (): React.JSX.Element => {
       try {
         const data = await fetchLeaderboard(); // your API call
         setLeaderboard(data);
-        console.log(data)
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
-
-    console.log(leaderboard)
 
     fetchData();
   }, []);
@@ -32,6 +28,9 @@ const LeaderBoard = (): React.JSX.Element => {
 
   const topThree = leaderboard.slice(0, 3);
   const underThree = leaderboard.slice(3);
+
+  console.log('TopThree:', topThree);
+  console.log('UnderThree:=======>', underThree);
 
   return (
     <ScrollView>

@@ -1,5 +1,4 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
 import {Dimensions} from 'react-native';
 import {LeaderboardPlayer} from '../../../database/services/leaderboardService'
 
@@ -14,73 +13,33 @@ interface BottomThreeProps {
   data: LeaderboardPlayer[];
 }
 
-const BottomThree = ({data}: BottomThreeProps) => {
+const BottomThree = ({ data = [] }: BottomThreeProps) => {
+  if (data.length === 0) {
+    return (
+      <View style={{ alignItems: 'center', marginTop: 20 }}>
+        <Text style={{ color: 'gray' }}>No additional players yet</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.body}>
-      <Text style={styles.txt}>Friends</Text>
-      <View style={styles.div}>
-        <View style={styles.pic} />
-        <View style={styles.info}>
-          <Text style={styles.name}>name</Text>
-          <Text style={styles.points}>190pts</Text>
+      <Text style={styles.txt}>Everyone</Text>
+      {data.map((player, index) => (
+        <View key={player.id} style={styles.div}>
+          <View style={styles.pic} />
+          <View style={styles.info}>
+            <Text style={styles.name}>{player.user_name}</Text>
+            <Text style={styles.points}>{player.points}pts</Text>
+          </View>
+          <View style={styles.border}>
+            <Text style={styles.place}>{index + 4}</Text>
+          </View>
         </View>
-        <View style={styles.border}>
-          <Text style={styles.place}>4</Text>
-        </View>
-      </View>
-      <View style={styles.div}>
-        <View style={styles.pic} />
-        <View style={styles.info}>
-          <Text style={styles.name}>name</Text>
-          <Text style={styles.points}>187pts</Text>
-        </View>
-        <View style={styles.border}>
-          <Text style={styles.place}>5</Text>
-        </View>
-      </View>
-      <View style={styles.div}>
-        <View style={styles.pic} />
-        <View style={styles.info}>
-          <Text style={styles.name}>name</Text>
-          <Text style={styles.points}>190pts</Text>
-        </View>
-        <View style={styles.border}>
-          <Text style={styles.place}>4</Text>
-        </View>
-      </View>
-      <View style={styles.div}>
-        <View style={styles.pic} />
-        <View style={styles.info}>
-          <Text style={styles.name}>name</Text>
-          <Text style={styles.points}>187pts</Text>
-        </View>
-        <View style={styles.border}>
-          <Text style={styles.place}>5</Text>
-        </View>
-      </View>
-      <View style={styles.div}>
-        <View style={styles.pic} />
-        <View style={styles.info}>
-          <Text style={styles.name}>name</Text>
-          <Text style={styles.points}>190pts</Text>
-        </View>
-        <View style={styles.border}>
-          <Text style={styles.place}>4</Text>
-        </View>
-      </View>
-      <View style={styles.div}>
-        <View style={styles.pic} />
-        <View style={styles.info}>
-          <Text style={styles.name}>name</Text>
-          <Text style={styles.points}>187pts</Text>
-        </View>
-        <View style={styles.border}>
-          <Text style={styles.place}>5</Text>
-        </View>
-      </View>
+      ))}
     </View>
   );
-}
+};
 
 export default BottomThree;
 

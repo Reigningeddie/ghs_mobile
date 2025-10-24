@@ -15,6 +15,5 @@ export const fetchLeaderboard = async (): Promise<LeaderboardPlayer[]> => {
 
   if (error) throw error;
 
-  console.log(data)
   return data as LeaderboardPlayer[];
 };
