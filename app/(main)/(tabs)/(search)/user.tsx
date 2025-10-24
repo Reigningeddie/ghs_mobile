@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import { useGame } from "../../../../database/context/gameContext";
 import { useFriends } from "../../../../database/context/friendsContext";
 import { useProfile } from "../../../../database/context/profileContext";
 import { useTarget } from "../../../../database/context/targetContext";
+import {getFollowersAndFollowing} from '../../../../database/services/friendService'
 
 // Get device dimensions
 import { Dimensions } from "react-native";
@@ -29,13 +30,26 @@ export default function UserProfile() {
   const { addPoints } = useGame();
   const { addFriend } = useFriends();
   const { profile, isProfileComplete, isLoading, error } = useProfile();
+  const [followers, setFollowers] = useState<number>(0);
+  const [following, setFollowing] = useState<number>(0);
+
+  const fetchFollowersAndFollowing = async (userId: string) => {
+  try {
+    const { followersCount, followingCount } = await getFollowersAndFollowing(userId);
+    setFollowers(followersCount || 0);
+    setFollowing(followingCount || 0);
+  } catch (err) {
+    console.error('Error fetching followers/following:', err);
+  }
+};
 
   // Fetch the target user's profile when id changes
   useEffect(() => {
     if (userId) {
       fetchUser(userId)
+      fetchFollowersAndFollowing(userId)
     }
-  }, [userId]);
+  }, [userId, fetchFollowersAndFollowing]);
 
   const handleScore = async () => {
     if (!profile?.id || !targetUser) return;
@@ -117,11 +131,11 @@ export default function UserProfile() {
             <Text style={styles.item}>points</Text>
           </View>
           <View style={styles.grid}>
-            <Text style={styles.num}>361</Text>
+            <Text style={styles.num}>{followers}</Text>
             <Text style={styles.item}>followers</Text>
           </View>
           <View style={styles.grid}>
-            <Text style={styles.num}>253</Text>
+            <Text style={styles.num}>{following}</Text>
             <Text style={styles.item}>following</Text>
           </View>
         </View>

@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Dimensions} from 'react-native';
+import {LeaderboardPlayer} from '../../../database/services/leaderboardService'
 
 //Get device Width
 const screenWidth = Dimensions.get('window').width;
@@ -9,28 +10,40 @@ const screenLength = Dimensions.get('window').height;
 const top3 = screenLength / 10;
 const thirds = screenWidth / 3 - 5;
 
-const TopThree = (): React.JSX.Element => {
+interface TopThreeProps {
+  data: LeaderboardPlayer[];
+}
+
+const TopThree = ({ data = [] }: TopThreeProps) => {
+  // Ensure we always have 3 slots for the top 3
+  const slots = [data[1], data[0], data[2]]; // 1st in center, 2nd left, 3rd right
+
   return (
     <View style={styles.body}>
       <View style={styles.top3}>
         <View style={styles.info}>
+          {/* Left (2nd place) */}
           <View style={[styles.sides, styles.left]}>
             <View style={styles.pic} />
             <Text style={styles.place}>2</Text>
-            <Text style={styles.name}>name</Text>
-            <Text style={styles.points}>200pts</Text>
+            <Text style={styles.name}>{slots[0]?.user_name ?? '—'}</Text>
+            <Text style={styles.points}>{slots[0]?.points ?? '—'} pts</Text>
           </View>
+
+          {/* Center (1st place) */}
           <View style={styles.center}>
             <View style={styles.pic} />
             <Text style={styles.place}>1</Text>
-            <Text style={styles.name}>name</Text>
-            <Text style={styles.points}>252pts</Text>
+            <Text style={styles.name}>{slots[1]?.user_name ?? '—'}</Text>
+            <Text style={styles.points}>{slots[1]?.points ?? '—'} pts</Text>
           </View>
+          
+          {/* Right (3rd place) */}
           <View style={[styles.sides, styles.right]}>
             <View style={styles.pic} />
             <Text style={styles.place}>3</Text>
-            <Text style={styles.name}>name</Text>
-            <Text style={styles.points}>198pts</Text>
+            <Text style={styles.name}>{slots[2]?.user_name ?? '—'}</Text>
+            <Text style={styles.points}>{slots[2]?.points ?? '—'} pts</Text>
           </View>
         </View>
       </View>

@@ -67,3 +67,25 @@ export const deleteRequestStatus = async (id: number) => {
     .eq('id', id);
   if (error) throw error;
 };
+
+export const getFollowersAndFollowing = async (userId: string) => {
+  // Count followers: users who have sent you a request that was accepted
+  const { count: followersCount, error: followersError } = await supabase
+    .from('friends')
+    .select('id', { count: 'exact' })
+    .eq('friend_id', userId)
+    .eq('status', 'accepted');
+
+  if (followersError) throw followersError;
+
+  // Count following: users you have sent a request to that was accepted
+  const { count: followingCount, error: followingError } = await supabase
+    .from('friends')
+    .select('id', { count: 'exact' })
+    .eq('user_id', userId)
+    .eq('status', 'accepted');
+
+  if (followingError) throw followingError;
+
+  return { followersCount, followingCount };
+};

@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Dimensions} from 'react-native';
+import {LeaderboardPlayer} from '../../../database/services/leaderboardService'
 
 //Get device Width
 const screenWidth = Dimensions.get('window').width;
@@ -9,7 +10,11 @@ const divHeight = screenHeight / 10;
 const div = screenWidth - 25;
 const info = screenWidth / 2.5;
 
-export default function UnderThree(): React.JSX.Element {
+interface BottomThreeProps {
+  data: LeaderboardPlayer[];
+}
+
+const BottomThree = ({data}: BottomThreeProps) => {
   return (
     <View style={styles.body}>
       <Text style={styles.txt}>Friends</Text>
@@ -76,6 +81,8 @@ export default function UnderThree(): React.JSX.Element {
     </View>
   );
 }
+
+export default BottomThree;
 
 const styles = StyleSheet.create({
   body: {

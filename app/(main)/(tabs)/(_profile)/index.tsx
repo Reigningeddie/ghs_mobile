@@ -5,6 +5,7 @@ import {useEffect, useState, useCallback} from 'react';
 import {useAuth} from '../../../../database/context/authContext';
 import {useProfile} from '../../../../database/context/profileContext';
 import { useFocusEffect } from '@react-navigation/native';
+import {getFollowersAndFollowing} from '../../../../database/services/friendService'
 // import type {NavProps} from '../types/types';
 
 //Get device Width
@@ -20,13 +21,26 @@ export default function Profile(): React.JSX.Element {
   const { profile, isProfileComplete } = useProfile();
   const [active] = useState<boolean>(false)
   const { fetchProfile } = useProfile();
+  const [followers, setFollowers] = useState<number>(0);
+  const [following, setFollowing] = useState<number>(0);
 
   // reloads profile on focus
   useFocusEffect(
     useCallback(() => {
       fetchProfile(authUser.id);
+      fetchFollowersAndFollowing(authUser.id);
     }, [])
   );
+
+  const fetchFollowersAndFollowing = async (userId: string) => {
+  try {
+    const { followersCount, followingCount } = await getFollowersAndFollowing(userId);
+    setFollowers(followersCount || 0);
+    setFollowing(followingCount || 0);
+  } catch (err) {
+    console.error('Error fetching followers/following:', err);
+  }
+};
 
   function handleLogout() {
     logout();
@@ -85,11 +99,11 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.item}>points</Text>
           </View>
           <View style={styles.grid}>
-            <Text style={styles.num}>361</Text>
+            <Text style={styles.num}>{followers}</Text>
             <Text style={styles.item}>followers</Text>
           </View>
           <View style={styles.grid}>
-            <Text style={styles.num}>253</Text>
+            <Text style={styles.num}>{following}</Text>
             <Text style={styles.item}>following</Text>
           </View>
         </View>
