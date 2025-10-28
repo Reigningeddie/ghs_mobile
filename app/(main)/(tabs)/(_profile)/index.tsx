@@ -107,6 +107,12 @@ export default function Profile(): React.JSX.Element {
             <Text style={styles.item}>following</Text>
           </View>
         </View>
+        <View style={styles.mulligan}>
+          <View style={styles.mulliBox}>
+            <Text style={styles.mulliNum}>01</Text>
+            <Text style={styles.mulliTxt}>mulligan</Text>
+          </View>
+        </View>
         <View style={styles.btns}>
           <Pressable style={[styles.btnBorders, active && styles.active]} onPress={() => router.push('/notifications')}>
             {active ? <Image source={require('../../../../assets/notificationActive.png')} /> :
@@ -203,6 +209,28 @@ const styles = StyleSheet.create({
   item: {
     color: '#353535',
     fontSize: 22,
+  },
+  mulligan: {
+    paddingBottom: 5
+  },
+  mulliBox: {
+    borderTopWidth: 0,
+    borderRightWidth: 1,
+    borderBottomWidth: 0,
+    borderLeftWidth: 1,
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingBottom: 20,
+    alignItems: 'center',
+  },
+  mulliTxt: {
+    fontSize: 15,
+    color: '#007BFF'
+  },
+  mulliNum: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#007BFF'
   },
   btns: {
     flexDirection: 'row'

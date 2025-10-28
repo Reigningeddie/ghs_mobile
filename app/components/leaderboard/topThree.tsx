@@ -13,10 +13,10 @@ interface TopThreeProps {
   data: LeaderboardPlayer[];
 }
 
-const TopThree = ({ data = [] }: TopThreeProps) => {
+const TopThree = ({ data = [] } : TopThreeProps) => {
   // Ensure we always have 3 slots for the top 3
   const slots = [data[1], data[0], data[2]]; // 1st in center, 2nd left, 3rd right
-  console.log('top ---->', data)
+  
   return (
     <View style={styles.body}>
       <View style={styles.top3}>
