@@ -5,6 +5,7 @@ import { TargetProvider } from './context/targetContext';
 import { FriendsProvider } from './context/friendsContext';
 import { SearchProvider } from './context/searchContext';
 import { GameProvider } from './context/gameContext';
+import { PostsProvider } from './context/postContext';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -14,7 +15,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           <FriendsProvider>
             <SearchProvider>
               <GameProvider>
-                {children}
+                <PostsProvider>
+                  {children}
+                </PostsProvider>
               </GameProvider>
             </SearchProvider>
           </FriendsProvider>

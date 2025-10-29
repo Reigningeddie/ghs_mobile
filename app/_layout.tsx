@@ -27,8 +27,8 @@ export default function Layout() {
     <AppProvider>
       <GestureHandlerRootView>
         <SafeAreaProvider>
-        <LayoutInner />
-      </SafeAreaProvider>
+          <LayoutInner />
+        </SafeAreaProvider>
       </GestureHandlerRootView>
     </AppProvider>
   );
