@@ -34,12 +34,6 @@ export default function Profile(): React.JSX.Element {
       fetchRequests();
     }, [])
   );
-  
-
-
-  if (friendRequests) {
-    console.log('active')
-  } 
 
   const fetchFollowersAndFollowing = async (userId: string) => {
   try {

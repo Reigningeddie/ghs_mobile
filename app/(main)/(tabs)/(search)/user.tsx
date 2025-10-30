@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -34,7 +34,7 @@ export default function UserProfile() {
   const [followers, setFollowers] = useState<number>(0);
   const [following, setFollowing] = useState<number>(0);
 
-  const fetchFollowersAndFollowing = async (userId: string) => {
+  const fetchFollowersAndFollowing = useCallback(async (userId: string) => {
   try {
     const { followersCount, followingCount } = await getFollowersAndFollowing(userId);
     setFollowers(followersCount || 0);
@@ -42,7 +42,7 @@ export default function UserProfile() {
   } catch (err) {
     console.error('Error fetching followers/following:', err);
   }
-};
+}, []);
 
   // Fetch the target user's profile when id changes
   useEffect(() => {
