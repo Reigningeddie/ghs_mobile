@@ -8,7 +8,7 @@ interface PostsContextType {
   handleLike: (post_id: number, user_id: number) => Promise<void>;
   handleUnlike: (post_id: number, user_id: number) => Promise<void>;
   handleAddComment: (post_id: number, user_id: number, text: string) => Promise<void>;
-  handleAddPost: (post: { user_id: number; opponent_id?: number; type: 'grand_slam' | 'challenge' | 'other'; caption?: string }) => Promise<void>;
+  addPost: (post: { user_id: number; opponent_id?: number; type: 'grand_slam' | 'challenge' | 'other'; caption?: string }) => Promise<void>;
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -67,7 +67,7 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Add a new post
-  const handleAddPost = async (post: { user_id: number; opponent_id?: number; type: 'grand_slam' | 'challenge' | 'other'; caption?: string }) => {
+  const addPost = async (post: { user_id: number; opponent_id?: number; type: 'grand_slam' | 'challenge' | 'other'; caption?: string }) => {
     try {
       const newPost = await addPost(post);
       await refreshPosts(); // Optional: refresh to get full profile data
@@ -82,7 +82,7 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <PostsContext.Provider
-      value={{ posts, loading, refreshPosts, handleLike, handleUnlike, handleAddComment, handleAddPost }}
+      value={{ posts, loading, refreshPosts, handleLike, handleUnlike, handleAddComment, addPost }}
     >
       {children}
     </PostsContext.Provider>

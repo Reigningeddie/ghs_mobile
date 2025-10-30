@@ -28,7 +28,6 @@ export default function UserProfile() {
   const router = useRouter();
   const { id: userId } = useLocalSearchParams<{ id: string }>();
   const { targetUser, fetchUser } = useTarget(); 
-  const { addPoints } = useGame();
   const { addFriend } = useFriends();
   const { addPost } = usePosts();
   const { profile, isProfileComplete, isLoading, error } = useProfile();
@@ -53,7 +52,7 @@ export default function UserProfile() {
     }
   }, [userId, fetchFollowersAndFollowing]);
 
-  const handleScore = async () => {
+  const handleChallenge = async () => {
   if (!profile?.id || !targetUser) return;
 
   if (!isProfileComplete) {
@@ -72,13 +71,11 @@ export default function UserProfile() {
   }
 
   try {
-    await addPoints(10); // points service
-
     // Add post via context
     await addPost({
       user_id: profile.id,
       opponent_id: targetUser.id,
-      type: 'grand_slam',
+      type: 'challenge',
       caption: `${profile.user_name} just Grand Hand Slammed ${targetUser.user_name}!`,
     });
 
@@ -120,7 +117,7 @@ export default function UserProfile() {
             <Image source={require('../../../../assets/addFriend.png')} style={styles.addFriend} />
           </Pressable>
         </View>
-        <Pressable onPress={handleScore}>
+        <Pressable onPress={handleChallenge}>
           <View style={styles.pic} >
             <Text style={styles.create}>{targetUser?.first_name ? '' : 'create Profile'}</Text>
           </View>

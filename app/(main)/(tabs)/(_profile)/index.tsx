@@ -1,12 +1,13 @@
-import {StyleSheet, Text, View, ScrollView, Pressable, Image, Alert} from 'react-native';
-import {useRouter} from 'expo-router';
-import {Dimensions} from 'react-native';
-import {useEffect, useState, useCallback} from 'react';
-import {useAuth} from '../../../../database/context/authContext';
-import {useProfile} from '../../../../database/context/profileContext';
+import { StyleSheet, Text, View, ScrollView, Pressable, Image, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Dimensions } from 'react-native';
+import { useEffect, useState, useCallback } from 'react';
+import { useAuth } from '../../../../database/context/authContext';
+import { useProfile } from '../../../../database/context/profileContext';
 import { useFocusEffect } from '@react-navigation/native';
-import {getFollowersAndFollowing} from '../../../../database/services/friendService'
-// import type {NavProps} from '../types/types';
+import { getFollowersAndFollowing } from '../../../../database/services/friendService';
+import { useFriends } from '../../../../database/context/friendsContext';
+
 
 //Get device Width
 const screenWidth = Dimensions.get('window').width;
@@ -19,7 +20,8 @@ export default function Profile(): React.JSX.Element {
   const router = useRouter();
   const { logout, authUser } = useAuth();
   const { profile, isProfileComplete } = useProfile();
-  const [active] = useState<boolean>(false)
+  const { fetchRequests, friendRequests } = useFriends();
+  const active = friendRequests.incoming.length > 0
   const { fetchProfile } = useProfile();
   const [followers, setFollowers] = useState<number>(0);
   const [following, setFollowing] = useState<number>(0);
@@ -29,8 +31,15 @@ export default function Profile(): React.JSX.Element {
     useCallback(() => {
       fetchProfile(authUser.id);
       fetchFollowersAndFollowing(authUser.id);
+      fetchRequests();
     }, [])
   );
+  
+
+
+  if (friendRequests) {
+    console.log('active')
+  } 
 
   const fetchFollowersAndFollowing = async (userId: string) => {
   try {
