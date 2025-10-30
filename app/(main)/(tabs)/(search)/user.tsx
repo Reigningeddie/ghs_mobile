@@ -13,7 +13,8 @@ import { useGame } from "../../../../database/context/gameContext";
 import { useFriends } from "../../../../database/context/friendsContext";
 import { useProfile } from "../../../../database/context/profileContext";
 import { useTarget } from "../../../../database/context/targetContext";
-import {getFollowersAndFollowing} from '../../../../database/services/friendService'
+import {getFollowersAndFollowing} from '../../../../database/services/friendService';
+import { usePosts } from '../../../../database/context/postContext';
 
 // Get device dimensions
 import { Dimensions } from "react-native";
@@ -29,6 +30,7 @@ export default function UserProfile() {
   const { targetUser, fetchUser } = useTarget(); 
   const { addPoints } = useGame();
   const { addFriend } = useFriends();
+  const { addPost } = usePosts();
   const { profile, isProfileComplete, isLoading, error } = useProfile();
   const [followers, setFollowers] = useState<number>(0);
   const [following, setFollowing] = useState<number>(0);
@@ -52,35 +54,42 @@ export default function UserProfile() {
   }, [userId, fetchFollowersAndFollowing]);
 
   const handleScore = async () => {
-    if (!profile?.id || !targetUser) return;
+  if (!profile?.id || !targetUser) return;
 
-    if (!isProfileComplete) {
-      Alert.alert(
-        "🎯 Complete Your Profile First",
-        "You need to complete your profile before earning points!\n\nRequired:\n• Username (6+ characters)\n• First Name\n• Dominant Hand",
-        [
-          { text: "Later", style: "cancel" },
-          {
-            text: "Complete Profile",
-            onPress: () => router.push("/(main)/(tabs)/(_profile)/edit"),
-          },
-        ]
-      );
-      return;
-    }
+  if (!isProfileComplete) {
+    Alert.alert(
+      "🎯 Complete Your Profile First",
+      "You need to complete your profile before earning points!",
+      [
+        { text: "Later", style: "cancel" },
+        {
+          text: "Complete Profile",
+          onPress: () => router.push("/(main)/(tabs)/(_profile)/edit"),
+        },
+      ]
+    );
+    return;
+  }
 
-    const { data, error } = await addPoints(10);
-    if (error) {
-      Alert.alert("Error", error.message);
-    } else {
-      Alert.alert(
-        "🎉 Grand Hand Slam!",
-        `You just Grand Hand Slammed ${
-          targetUser.user_name || "a player"
-        } and earned 10 points!`
-      );
-    }
-  };
+  try {
+    await addPoints(10); // points service
+
+    // Add post via context
+    await addPost({
+      user_id: profile.id,
+      opponent_id: targetUser.id,
+      type: 'grand_slam',
+      caption: `${profile.user_name} just Grand Hand Slammed ${targetUser.user_name}!`,
+    });
+
+    Alert.alert(
+      "🎉 Grand Hand Slam!",
+      `You just Grand Hand Slammed ${targetUser.user_name} and earned 10 points!`
+    );
+  } catch (err: any) {
+    Alert.alert("Error", err.message || "Something went wrong");
+  }
+};
 
   if (isLoading) {
     return (
