@@ -50,7 +50,7 @@ export default function UserProfile() {
       fetchUser(userId)
       fetchFollowersAndFollowing(userId)
     }
-  }, [userId, fetchFollowersAndFollowing]);
+  }, [userId, fetchUser, fetchFollowersAndFollowing]);
 
   const handleChallenge = async () => {
   if (!profile?.id || !targetUser) return;
@@ -73,18 +73,19 @@ export default function UserProfile() {
   try {
     // Add post via context
     await addPost({
-      user_id: profile.id,
-      opponent_id: targetUser.id,
-      type: 'challenge',
-      caption: `${profile.user_name} just Grand Hand Slammed ${targetUser.user_name}!`,
-    });
+    user_id: profile.id,
+    opponent_id: targetUser.id,
+    type: "challenge",
+    caption: `${profile.user_name} just Grand Hand Slammed ${targetUser.user_name}!`,
+  });
 
-    Alert.alert(
-      "🎉 Grand Hand Slam!",
-      `You just Grand Hand Slammed ${targetUser.user_name} and earned 10 points!`
-    );
-  } catch (err: any) {
-    Alert.alert("Error", err.message || "Something went wrong");
+  Alert.alert(
+    "🎉 Grand Hand Slam!",
+    `You just Grand Hand Slammed ${targetUser.user_name} and earned 10 points!`
+  );
+} catch (err: any) {
+  console.error("Error sending challenge:", err);
+  Alert.alert("Error", err.message || "Something went wrong");
   }
 };
 
