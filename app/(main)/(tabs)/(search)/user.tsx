@@ -91,7 +91,7 @@ export default function UserProfile() {
 
   if (isLoading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.center}>
         <Text>Loading profile...</Text>
       </View>
     );
@@ -99,7 +99,7 @@ export default function UserProfile() {
 
   if (error) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.center}>
         <Text>Error loading profile: {error}</Text>
       </View>
     );
@@ -161,6 +161,11 @@ export default function UserProfile() {
 }
 
 const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   contentContainer: {
     alignItems: 'center',
     width: screenWidth,
