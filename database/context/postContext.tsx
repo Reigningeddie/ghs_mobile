@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { PostWithProfile, getPostsWithProfileCounts, likePost, unlikePost, addComment, addPost } from '../services/postService';
+import {
+  PostWithProfile,
+  getPostsWithProfileCounts,
+  likePost,
+  unlikePost,
+  addComment,
+  addPost as addPostService,
+} from '../services/postService';
 
 interface PostsContextType {
   posts: PostWithProfile[];
@@ -69,7 +76,7 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
   // Add a new post
   const addPost = async (post: { user_id: number; opponent_id?: number; type: 'grand_slam' | 'challenge' | 'other'; caption?: string }) => {
     try {
-      const newPost = await addPost(post);
+      const newPost = await addPostService(post);
       await refreshPosts(); // Optional: refresh to get full profile data
     } catch (err) {
       console.error('Failed to add post', err);
