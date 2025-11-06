@@ -29,9 +29,6 @@ const LeaderBoard = (): React.JSX.Element => {
   const topThree = leaderboard.slice(0, 3);
   const underThree = leaderboard.slice(3);
 
-  console.log('TopThree:', topThree);
-  console.log('UnderThree:=======>', underThree);
-
   return (
     <ScrollView>
       <TopThree data={topThree} />
