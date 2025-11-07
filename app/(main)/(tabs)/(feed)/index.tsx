@@ -1,16 +1,31 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, Pressable } from 'react-native';
+import { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Pressable, RefreshControl } from 'react-native';
 import { usePosts } from '../../../../database/context/postContext';
 
 const photoWidth = '25%';
 
 const Feed = () => {
-  const { posts, loading, handleLike, handleUnlike } = usePosts();
+  const { posts, loading, handleLike, handleUnlike, refreshPosts } = usePosts();
+  const [refreshing, setRefreshing] = useState(false);
 
-  if (loading) return <Text style={styles.loading}>Loading...</Text>;
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refreshPosts();
+    } catch (error) {
+      console.error('Error refreshing posts:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshPosts])
+
+  if (loading && !refreshing) return <Text style={styles.loading}>Loading...</Text>;
 
   return (
-    <ScrollView contentContainerStyle={styles.body}>
+    <ScrollView 
+    contentContainerStyle={styles.body}
+    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor='black' />}
+    >
       <Text style={styles.activity}>All Activity</Text>
 
       {posts.map(post => (

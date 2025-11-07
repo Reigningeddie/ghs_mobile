@@ -1,6 +1,14 @@
 // app/(main)/(tabs)/(_profile)/edit.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, Alert, Image, ScrollView } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  StyleSheet, 
+  Pressable, 
+  Alert, Image, 
+  ScrollView } from 'react-native';
+import { pickImage } from '../../../../database/services/imageService';
 import { useAuth } from '../../../../database/context/authContext';
 import { updateProfileService } from '../../../../database/services/profileService';
 import { useProfile } from '../../../../database/context/profileContext';
@@ -10,7 +18,6 @@ export default function EditProfile() {
   const router = useRouter();
   const { authUser } = useAuth();
   const { profile, fetchProfile } = useProfile();
-
   // Local state for form inputs
   const [firstName, setFirstName] = useState(profile?.first_name ?? '');
   const [lastName, setLastName] = useState(profile?.last_name ?? '');
@@ -79,6 +86,23 @@ export default function EditProfile() {
     }
   };
 
+  const handleAvatar = async () => {
+  const result = await pickImage();
+  if (!result?.uri) return;
+
+  try {
+    setIsSubmitting(true);
+    await updateProfileService(authUser.id, { avatar_url: result.uri });
+    await fetchProfile(authUser.id);
+    Alert.alert('Success', 'Avatar updated!');
+  } catch (err: any) {
+    Alert.alert('Error', err.message || 'Failed to update avatar.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
   return (
     <View style={styles.body}>
       <ScrollView>
@@ -88,7 +112,7 @@ export default function EditProfile() {
           <Text style={styles.bannertxt}>Back</Text>
         </Pressable>
       </View>
-      <Pressable style={styles.picBorder}>
+      <Pressable style={styles.picBorder} onPress={()=>{handleAvatar()}}>
         <View style={styles.pic}/>
       </Pressable>
       <View style={styles.container}>
