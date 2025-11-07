@@ -42,7 +42,7 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
     try {
       await likePost(post_id, user_id);
       setPosts(prev =>
-        prev.map(p => (p.id === post_id ? { ...p, like_count: p.like_count + 1 } : p))
+        prev.map(p => (p.id === post_id ? { ...p, like_count: p.like_count + 1, isLiked: true } : p))
       );
     } catch (err) {
       console.error('Failed to like post', err);
@@ -54,7 +54,7 @@ export const PostsProvider = ({ children }: { children: ReactNode }) => {
     try {
       await unlikePost(post_id, user_id);
       setPosts(prev =>
-        prev.map(p => (p.id === post_id ? { ...p, like_count: Math.max(p.like_count - 1, 0) } : p))
+        prev.map(p => (p.id === post_id ? { ...p, like_count: Math.max(p.like_count - 1, 0), isLiked: false } : p))
       );
     } catch (err) {
       console.error('Failed to unlike post', err);

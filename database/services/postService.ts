@@ -31,6 +31,7 @@ export type PostWithProfile = {
   caption?: string | null;
   created_at: string;
   like_count: number;
+  isLiked?: boolean;
   comment_count: number;
 };
 

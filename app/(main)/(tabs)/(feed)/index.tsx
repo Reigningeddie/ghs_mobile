@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Pressable, RefreshControl } from 'react-native';
 import { usePosts } from '../../../../database/context/postContext';
 
+
 const photoWidth = '25%';
 
 //TODO: create future update to group posts from single user in order to fix overcrowding feed
@@ -65,8 +66,14 @@ const Feed = () => {
           {/* Likes and Comments */}
           <View style={styles.interactions}>
             <View style={styles.column}>
-              <Pressable onPress={() => handleLike(post.id, post.user_id)}>
-                <Image source={require('../../../../assets/likeInactive.png')} style={styles.icon} />
+              <Pressable onPress={() => 
+                post.isLiked
+                  ? handleUnlike(post.id, post.user_id)
+                  : handleLike(post.id, post.user_id)
+                }>
+                {post.isLiked ? 
+                  <Image source={require('../../../../assets/likeActive.png')} style={styles.icon} />
+                  : <Image source={require('../../../../assets/likeInactive.png')} style={styles.icon} />}
               </Pressable>
               <Text style={[styles.likes, styles.paddingRight]}>{post.like_count}</Text>
             </View>
