@@ -4,6 +4,8 @@ import { usePosts } from '../../../../database/context/postContext';
 
 const photoWidth = '25%';
 
+//TODO: create future update to group posts from single user in order to fix overcrowding feed
+
 const Feed = () => {
   const { posts, loading, handleLike, handleUnlike, refreshPosts } = usePosts();
   const [refreshing, setRefreshing] = useState(false);
@@ -36,7 +38,7 @@ const Feed = () => {
               {/* Could add Image source={post.user_avatar_url} */}
             </View>
 
-            <View style={styles.gshText}>
+            <View style={styles.ghsText}>
               <Text style={styles.gsh}>Grand Hand</Text>
               <Text style={styles.gsh}>Slammed</Text>
               <Text style={styles.time}>
@@ -62,13 +64,17 @@ const Feed = () => {
 
           {/* Likes and Comments */}
           <View style={styles.interactions}>
-            <Pressable onPress={() => handleLike(post.id, post.user_id)}>
-              <Image source={require('../../../../assets/likeActive.png')} style={styles.icon} />
-            </Pressable>
-            <Text style={styles.likes}>{post.like_count}</Text>
-
+            <View style={styles.column}>
+              <Pressable onPress={() => handleLike(post.id, post.user_id)}>
+                <Image source={require('../../../../assets/likeInactive.png')} style={styles.icon} />
+              </Pressable>
+              <Text style={[styles.likes, styles.paddingRight]}>{post.like_count}</Text>
+            </View>
+            
+          <View style={styles.column}>
             <Image source={require('../../../../assets/comments.png')} style={[styles.icon, { marginLeft: 15 }]} />
-            <Text style={styles.comment}>{post.comment_count}</Text>
+            <Text style={[styles.comment, styles.paddingLeft]}>{post.comment_count}</Text>
+          </View>
           </View>
         </View>
       ))}
@@ -119,7 +125,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: photoWidth,
   },
-  gshText: {
+  ghsText: {
     alignItems: 'center',
     justifyContent: 'center',
     width: '50%',
@@ -172,6 +178,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 5,
   },
+  column: {
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
   likes: {
     marginLeft: 5,
     color: 'white',
@@ -184,4 +194,10 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
+  paddingRight: {
+    paddingRight: 6 
+  },
+  paddingLeft: {
+    paddingLeft: 9
+  }
 });
