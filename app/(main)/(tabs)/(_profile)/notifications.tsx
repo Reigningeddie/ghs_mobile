@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, Pressable, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import Requests from '../../../components/notifications/requests'
 import Likes from '../../../components/notifications/likes'
+import Challenges from '../../../components/notifications/challenges'
 
 export default function Notifications(): React.JSX.Element {
   const router = useRouter();
@@ -15,6 +16,10 @@ export default function Notifications(): React.JSX.Element {
         </Pressable>
         <Text style={styles.title}>Notifications</Text>
       </View>
+        <View style={styles.section}>
+          <Text style={styles.titleTxt}>Challenges</Text>
+          <Challenges />
+        </View>
         <View style={styles.section}>
           <Text style={styles.titleTxt}>Friend Requests</Text>
           <Requests /> 

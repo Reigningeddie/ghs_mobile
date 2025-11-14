@@ -1,21 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 
-const Likes = () => {
+const Challenges = () => {
   return (
     <View style={styles.card}>
-      <View style={styles.img}/>
+      <View style={styles.img}></View>
       <View style={styles.info}>
-        <Text style={styles.user}>beerFlips</Text>
-        <Text style={styles.txt}>Grand Hand Slammed</Text>
-        <Text style={styles.user}>reigningeddie</Text>
-        <Text style={styles.time}>5m</Text>
+        <Text style={styles.user}>credibowl</Text>
+        <Text style={styles.txt}>Extended a challange</Text>
+        <Text style={styles.time}>5m ago</Text>
       </View>
-      <View style={styles.post} />
+      <Pressable style={styles.btn}>
+        <Text style={styles.btnTxt}>Use Mulligan</Text>
+      </Pressable>
     </View>
   )
 }
 
-export default Likes
+export default Challenges
 
 const styles = StyleSheet.create({
   card: {
@@ -24,15 +25,16 @@ const styles = StyleSheet.create({
   },
   img: {
     backgroundColor: '#284B63',
-    height: 65,
-    width: 65,
-    borderRadius: 50
+    height: 50,
+    width: 50,
+    borderRadius: 25,
   },
   info: {
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '65%',
+    marginLeft: 8
   },
   user: {
     fontSize: 17,
@@ -53,17 +55,10 @@ const styles = StyleSheet.create({
     width: '19%',
     height: 26,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   btnTxt: {
     color: 'white',
+    fontSize: 13
   },
-  post: {
-    backgroundColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 1,
-    borderColor: 'grey',
-    width: '19%',
-    height: 70
-  }
 })
