@@ -1,8 +1,35 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 
 const Challenges = () => {
+
+  const translateX = useSharedValue(0)
+  const threshold = 120
+  const onAccept = () => {
+    console.log('Challenge Accepted!')
+  }
+
+  const pan = Gesture.Pan()
+    .onUpdate((event) => {
+      if (event.translationX > 0) { 
+        translateX.value = event.translationX
+      }
+    })
+    .onEnd(() => {
+      if (translateX.value > threshold) {
+        onAccept()
+      }
+      translateX.value = withSpring(0) // snap back
+    })
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }))
+
   return (
-    <View style={styles.card}>
+    <GestureDetector gesture={pan}>
+      <View style={styles.card}>
       <View style={styles.img}></View>
       <View style={styles.info}>
         <Text style={styles.user}>credibowl</Text>
@@ -13,6 +40,7 @@ const Challenges = () => {
         <Text style={styles.btnTxt}>Use Mulligan</Text>
       </Pressable>
     </View>
+    </GestureDetector>
   )
 }
 
@@ -22,6 +50,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 5
   },
   img: {
     backgroundColor: '#284B63',
